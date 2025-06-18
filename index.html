@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MealMind</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="header">
+    <h1 class="title">MealMind</h1>
+    <p class="subtitle">Smart Meal Planning from Your Ingredients</p>
+  </header>
+
+  <main class="container">
+    <section class="input-section">
+      <input type="text" id="ingredient-input" class="input-field" placeholder="e.g. eggs, tomatoes" />
+      <button id="add-btn" class="primary-btn">Add Ingredient</button>
+    </section>
+
+    <div id="ingredient-list" class="ingredient-list"></div>
+
+    <button id="search-btn" class="primary-btn">Find Recipes</button>
+
+    <div id="recipe-results" class="recipe-results"></div>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
