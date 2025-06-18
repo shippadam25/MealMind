@@ -3,6 +3,28 @@ const ingredients = [];
 document.getElementById('add-btn').addEventListener('click', addIngredient);
 document.getElementById('search-btn').addEventListener('click', getRecipes);
 
+document.getElementById('loginSubmit').addEventListener('click', () => {
+  const user = document.getElementById('usernameInput').value.trim();
+  const pass = document.getElementById('passwordInput').value.trim();
+  const msg = document.getElementById('loginMessage');
+
+  if (user === 'admin' && pass === 'password') {
+    msg.classList.remove('text-danger');
+    msg.classList.add('text-success');
+    msg.textContent = 'Login successful!';
+    // Optionally close dropdown after login:
+    // bootstrap.Dropdown.getInstance(document.getElementById('dropdownLogin')).hide();
+  } else {
+    msg.classList.remove('text-success');
+    msg.classList.add('text-danger');
+    msg.textContent = 'Invalid username or password.';
+  }
+});
+
+
+
+
+
 document.getElementById('ingredient-input').addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
     addIngredient();
