@@ -9,7 +9,8 @@ It’s your intelligent kitchen assistant, designed to simplify daily meal decis
 * HOW TO USE 
 
 
-* FRONT/BACKEND TECHNOLOGY USED 
+* FRONT/BACKEND TECHNOLOGY USED
+
 HTML
 CSS
 React
