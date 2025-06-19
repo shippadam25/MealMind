@@ -10,7 +10,7 @@ It’s your intelligent kitchen assistant, designed to simplify daily meal decis
 
 
 * FRONT/BACKEND TECHNOLOGY USED 
-- HTML
-- CSS
-- React
-- JavaScript
+HTML
+CSS
+React
+JavaScript
