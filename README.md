@@ -3,11 +3,14 @@ By understanding your available ingredients, dietary needs, and food preferences
 generates tailored recipe suggestions, optimized grocery lists, and customizable serving sizes.
 It’s your intelligent kitchen assistant, designed to simplify daily meal decisions and reduce food waste.
 
-* INSTALLATION INSTRUCTIONS *
+* INSTALLATION INSTRUCTIONS 
 
 
-* HOW TO USE *
+* HOW TO USE 
 
 
-* LANGUAGES USED * 
-
+* FRONT/BACKEND TECHNOLOGY USED 
+- HTML
+- CSS
+- React
+- JavaScript
