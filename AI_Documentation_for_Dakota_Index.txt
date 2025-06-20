@@ -1,0 +1,107 @@
+========================================================
+
+Ran project idea through chatgpt, Gemini, and deep seek. Chatgpt provided the best outline I believe. 
+Chatgpt results often vary. use of the free model provides a limited use of the pro version after the limit is used answers are less reliable and it is somewhat difficult to control the direction of conversation.
+
+=======================================================
+
+
+For the project ideas I was thinking about a Smart Grocery List generator, A web page where users input meals, dietary preferences, or ingredients they already have, and the app:
+• Suggests meals
+• Builds a complete grocery list
+• Adjusts quantities for the number of servings
+• Avoids waste by optimizing ingredients
+
+ChatGPT said:
+That's a fantastic and practical project idea! A Smart Grocery List Generator is both technically rich and genuinely useful for users. Here’s a breakdown of the key components, some technical considerations, and potential stretch goals you could include depending on how deep you'd like to go.
+
+✅ Core Features Breakdown
+1. User Input
+Meals: Let users search for or enter meal names (e.g., “Spaghetti Bolognese”).
+
+Dietary Preferences: Filters like vegetarian, vegan, gluten-free, etc.
+
+Available Ingredients: Users can check off items they already have.
+
+2. Meal Suggestion Engine
+Use a recipe API (e.g., Spoonacular, Edamam, Tasty API) or build your own recipe database.
+
+Filter recipes by dietary preference and available ingredients.
+
+Rank or suggest recipes based on fewest missing ingredients or prep time.
+
+3. Grocery List Builder
+Combine ingredient lists from selected meals.
+
+Adjust quantities based on number of servings.
+
+Group by grocery categories (produce, dairy, pantry, etc.).
+
+Optionally allow switching between metric/imperial units.
+
+4. Waste Optimization
+Suggest meals that reuse leftover ingredients.
+
+Flag items that might spoil soon based on user-entered fridge contents.
+
+Recommend ingredient substitutions to avoid extra purchases.
+
+
+
+
+=======================================================
+
+asked Chatgpt,gemini, and deepseek to provide a mock up. 
+
+====================================================
+
+chatgpt and deepseek go straight for react/node.js if you don't give any other instruction while Gemini gave react/node.js and html 
+
+========================================================================================================
+
+Gemmini seems to style the best automaticly out of the options, while the the other ai need more promting
+
+==========================================================================================================
+
+tried to convert basic html to react, unable to init Tailwind. solutions suggested by chatgpt and deepseek not yet effective. Gemmini seems to have trouble showing some  commands. everything else worked well, i think
+
+================================================================================================
+
+Asked Gemini to add a main page and move the app's function to tabs. 
+
+================================================================== 
+
+Html file too big for chatgpt and Gemini. used deep seek to for possible react application. used normal styling rather than tailwind. the main page shows up but the others tabs show nothing.
+
+==============================================================================================
+
+uploaded files to Deep Seek asked it to analyze the file for mistake. It first removed and changed some things that errored the application. 
+
+==========================================================================================
+
+ERROR
+[eslint] 
+src\GroceryListTab.js
+  Line 17:5:  'setSelectedMeals' is not defined  no-undef
+  Line 18:5:  'setPantryItems' is not defined    no-undef
+
+src\MealPlanTab.js
+  Line 106:5:  'setActiveTab' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+
+ai
+Ah, I see the issue now. The errors occur because we removed some props that were being used in the components. Let me provide the exact fixes for each file:
+
+
+===========================================================================
+
+The next set of code fixed the error and the content of the other tabs are now visable
+
+===================================================================================
+
+asked ai to create a pantry tab and move pantry content to it
+
+
+
+
