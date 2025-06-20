@@ -1,7 +1,17 @@
-Haven't added a lot of recipes, If you wan't to see how it works the only recipes that I add are:
-1. Tomato Omelette - TYPE: eggs, tomatoes and onion
-2. Avocado Toast - TYPE: bread, avocado, salt
-3. Pasta Salad - TYPE: pasta, tomatoes, olive oil
-4. Veggie Stir Fry - TYPE: broccoli, carrot, soy sauce
+MealMind is an AI-powered meal planning app that helps you cook smarter and waste less. 
+By understanding your available ingredients, dietary needs, and food preferences, MealMind 
+generates tailored recipe suggestions, optimized grocery lists, and customizable serving sizes.
+It’s your intelligent kitchen assistant, designed to simplify daily meal decisions and reduce food waste.
 
-We could or not use this sample for our next class, just to show some code as the professor asked. 
+* INSTALLATION INSTRUCTIONS 
+
+
+* HOW TO USE 
+
+
+* FRONT/BACKEND TECHNOLOGY USED
+
+HTML
+CSS
+React
+JavaScript
