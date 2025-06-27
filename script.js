@@ -510,3 +510,13 @@
         renderSelectedMeals(); // Initialize selected meals area
         renderPantryItems(); // Initialize pantry area
         showTab('home'); // Show the home tab by default when the page loads
+
+        const container = document.getElementById('login-container');
+
+        document.getElementById('signUp').addEventListener('click', () => {
+        container.classList.add('right-panel-active');
+        });
+
+        document.getElementById('signIn').addEventListener('click', () => {
+        container.classList.remove('right-panel-active');
+        });
