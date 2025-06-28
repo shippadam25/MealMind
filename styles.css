@@ -1,162 +1,436 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f9f9f9;
-  margin: 0;
-  padding: 0;
-}
+/*
+         * IMPORTANT: The @apply directive is a Tailwind CSS feature that requires a build process (e.g., PostCSS).
+         * For direct use in a <style> tag in a plain HTML file, we must manually expand
+         * Tailwind's utility classes into standard CSS properties.
+         * The styles below have been manually "compiled" from the previous @apply definitions.
+         */
 
-.header {
-  background-color: #4CAF50;
-  padding: 20px;
-  text-align: center;
-  color: white;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #ffffff; /* Equivalent of bg-white */
+            border-radius: 1rem;       /* Equivalent of rounded-2xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* Equivalent of shadow-xl */
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+        }
+        .btn-primary {
+            background-color: #2563eb; /* Equivalent of bg-blue-600 */
+            color: #ffffff;            /* Equivalent of text-white */
+            font-weight: 600;           /* Equivalent of font-semibold */
+            padding: 0.5rem 1rem;       /* Equivalent of py-2 px-4 */
+            border-radius: 0.5rem;      /* Equivalent of rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Equivalent of shadow-md */
+            transition-property: background-color; /* Equivalent of transition-colors */
+            transition-duration: 200ms;            /* Equivalent of duration-200 */
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8; /* Equivalent of hover:bg-blue-700 */
+        }
+        .btn-secondary {
+            background-color: #e5e7eb; /* Equivalent of bg-gray-200 */
+            color: #1f2937;            /* Equivalent of text-gray-800 */
+            font-weight: 600;           /* Equivalent of font-semibold */
+            padding: 0.5rem 1rem;       /* Equivalent of py-2 px-4 */
+            border-radius: 0.5rem;      /* Equivalent of rounded-lg */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalent of shadow-sm */
+            transition-property: background-color; /* Equivalent of transition-colors */
+            transition-duration: 200ms;            /* Equivalent of duration-200 */
+        }
+        .btn-secondary:hover {
+            background-color: #d1d5db; /* Equivalent of hover:bg-gray-300 */
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 0.75rem;          /* Equivalent of p-3 */
+            border-width: 1px;         /* Equivalent of border */
+            border-color: #d1d5db;     /* Equivalent of border-gray-300 */
+            border-radius: 0.5rem;     /* Equivalent of rounded-lg */
+        }
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: 2px solid transparent; /* default outline reset */
+            outline-offset: 2px;            /* default outline offset */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* focus:ring-blue-500 */
+            border-color: #3b82f6;          /* focus:border-blue-500 */
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .checkbox-input {
+            appearance: none; /* Hide default checkbox */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            height: 1.25rem; /* Equivalent of h-5 */
+            width: 1.25rem;  /* Equivalent of w-5 */
+            background-color: #ffffff;
+            border-width: 1px;
+            border-color: #d1d5db;
+            border-radius: 0.25rem; /* Equivalent of rounded */
+            margin-right: 0.5rem; /* Equivalent of mr-2 */
+            cursor: pointer;
+            position: relative;
+        }
+        .checkbox-input:checked {
+            background-color: #2563eb; /* Equivalent of text-blue-600 */
+            border-color: #2563eb;
+        }
+        .checkbox-input:checked::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0.5rem; /* Checkmark width */
+            height: 0.75rem; /* Checkmark height */
+            border: solid #ffffff;
+            border-width: 0 2px 2px 0;
+            transform: translate(-50%, -65%) rotate(45deg);
+        }
+        .meal-card-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
 
-.title {
-  margin: 0;
-  font-size: 2rem;
-}
+        /* Custom styles for tabs - Manually Expanded */
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: -1px; /* Equivalent of -mb-px to overlap with content border */
+            background-color: #ffffff; /* Equivalent of bg-white */
+            border-top-left-radius: 0.75rem;  /* Equivalent of rounded-t-xl */
+            border-top-right-radius: 0.75rem; /* Equivalent of rounded-t-xl */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalent of shadow-sm */
+        }
+        .tab-nav ul {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            list-style: none; /* Remove default list style */
+            padding: 0;      /* Remove default padding */
+            margin: 0;       /* Remove default margin */
+        }
+        .tab-button {
+            padding: 1rem 2rem;       /* Equivalent of px-8 py-4 */
+            font-size: 1.25rem;       /* Equivalent of text-xl */
+            font-weight: 500;         /* Equivalent of font-medium */
+            color: #4b5563;           /* Equivalent of text-gray-600 */
+            border-bottom-width: 4px; /* Equivalent of border-b-4 */
+            border-color: transparent;/* Equivalent of border-transparent */
+            transition-property: all; /* Equivalent of transition-all */
+            transition-duration: 200ms; /* Equivalent of duration-200 */
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* Equivalent of ease-in-out */
+            cursor: pointer;
+            background-color: transparent; /* Ensure no default button background */
+            border-top-left-radius: 0.5rem; /* Added for subtle rounding */
+            border-top-right-radius: 0.5rem; /* Added for subtle rounding */
+            border-left: none; /* Remove default button borders */
+            border-right: none;
+            border-top: none;
+            outline: none; /* Remove outline on focus if desired */
+        }
+        .tab-button:hover {
+            color: #1d4ed8;       /* Equivalent of hover:text-blue-700 */
+            border-color: #60a5fa; /* Equivalent of hover:border-blue-400 */
+        }
+        .tab-button.active {
+            color: #1e40af;       /* Equivalent of text-blue-800 */
+            border-color: #2563eb; /* Equivalent of border-blue-600 */
+            font-weight: 700;     /* Equivalent of font-bold */
+            background-color: #eff6ff; /* Equivalent of bg-blue-50 */
+        }
+        .tab-content {
+            display: none; /* Hidden by default */
+            background-color: #ffffff; /* Equivalent of bg-white */
+            padding: 1.5rem;           /* Equivalent of p-6 */
+            border-bottom-left-radius: 0.75rem;  /* Equivalent of rounded-b-xl */
+            border-bottom-right-radius: 0.75rem; /* Equivalent of rounded-b-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Equivalent of shadow-md */
+        }
+        .tab-content.active {
+            display: block; /* Show active tab content */
+        }
 
-.subtitle {
-  margin: 5px 0 0;
-}
+        /* Adjustments for the main container to match rounded tabs */
+        /* These are already applied directly to .container above, keeping this comment for context. */
+        /* .container {
+             @apply bg-white rounded-2xl shadow-xl p-8 my-8;
+        } */
 
-.container {
-  max-width: 800px;
-  margin: 30px auto;
-  padding: 0 20px;
-}
+        /* Ensure the container's inner padding doesn't push tabs */
+        .container > h1 {
+            padding-top: 0; /* Adjust if needed, usually handled by margin-top */
+        }
 
-.input-section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-  align-items: center;
-}
+        /* Login style */
 
-.input-field {
-  flex: 1;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
-.primary-btn {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.2s ease;
-}
+        #login-container * {
+            box-sizing: border-box;
+        }
 
-.primary-btn:hover {
-  background-color: #45a049;
-}
+        #login-container body {
+            background: #f6f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            margin: -20px 0 50px;
+        }
 
-.ingredient-list {
-  margin-top: 10px;
-}
+        #login-container h1 {
+            font-weight: bold;
+            margin: 0;
+        }
 
-.ingredient {
-  display: inline-block;
-  background-color: #e0f5e0;
-  color: #333;
-  padding: 6px 12px;
-  margin: 5px;
-  border-radius: 20px;
-  font-size: 0.95rem;
-}
+        #login-container h2 {
+            text-align: center;
+        }
 
-.ingredient.highlighted {
-  background-color: #2196F3;  /* blue */
-  color: white;
-  font-weight: bold;
-}
+        #login-container p {
+            font-size: 14px;
+            font-weight: 100;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 20px 0 30px;
+        }
 
-.recipe-results {
-  margin-top: 20px;
-}
+        #login-container span {
+            font-size: 12px;
+        }
 
-.recipe {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+        #login-container a {
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 15px 0;
+        }
 
-.recipe h3 {
-  margin-top: 0;
-  color: #333;
-}
+        #login-container button {
+            border-radius: 20px;
+            border: 1px solid #FF4B2B;
+            background-color: #FF4B2B;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+        }
 
-.recipe p {
-  margin: 5px 0;
-  color: #666;
-}
+        #login-container button:active {
+            transform: scale(0.95);
+        }
 
-@media (max-width: 600px) {
-  .input-section {
-    flex-direction: column;
-  }
+        #login-container button:focus {
+            outline: none;
+        }
 
-  .input-field,
-  .primary-btn {
-    width: 100%;
-  }
-}
+        #login-container button.ghost {
+            background-color: transparent;
+            border-color: #FFFFFF;
+        }
 
-.login-wrapper {
-  position: fixed;
-  top: 30px;
-  right: 46px;
-  z-index: 1000;
-  user-select: none;
-}
+        #login-container form {
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+        }
 
-.login-icon {
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: #282552;
-  transition: color 0.3s;
-}
+        #login-container input {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+        }
 
-.login-icon:hover {
-  color: #747574;
-}
+        #login-container .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+                    0 10px 10px rgba(0,0,0,0.22);
+            position: relative;
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
+        }
 
-.login-form {
-  margin-top: 8px;
-  background: white;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+        #login-container .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
 
-.hidden {
-  display: none;
-}
+        #login-container .sign-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
 
-.login-input {
-  padding: 6px 8px;
-  font-size: 0.9rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 90%;
-}
+        #login-container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+        }
 
-.login-message {
-  color: red;
-  font-size: 0.85rem;
-  height: 18px;
-}
+        #login-container .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
 
+        #login-container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        @keyframes show {
+            0%, 49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
+            
+            50%, 100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+
+        #login-container .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        #login-container.right-panel-active .overlay-container{
+            transform: translateX(-100%);
+        }
+
+        #login-container .overlay {
+            background: #FF416C;
+            background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+            background: linear-gradient(to right, #FF4B2B, #FF416C);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 0 0;
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        #login-container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        #login-container .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        #login-container .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        #login-container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        #login-container .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        #login-container.right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        #login-container .social-container {
+            margin: 20px 0;
+        }
+
+        #login-container .social-container a {
+            border: 1px solid #DDDDDD;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            height: 40px;
+            width: 40px;
+        }
+
+        #login-container footer {
+            background-color: #222;
+            color: #fff;
+            font-size: 14px;
+            bottom: 0;
+            position: fixed;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 999;
+        }
+
+        #login-container footer p {
+            margin: 10px 0;
+        }
+
+        #login-container footer i {
+            color: red;
+        }
+
+        #login-container footer a {
+            color: #3c97bf;
+            text-decoration: none;
+        }
+        
+        #userIcon {
+            width: 40px;   /* or whatever size you want */
+            height: 40px;
+            cursor: pointer; /* to show it's clickable */
+            object-fit: contain; /* keeps aspect ratio */
+        }
