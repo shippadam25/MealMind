@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Recipe Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <form id="recipeForm">
+    <label>Ingredients:</label>
+    <input type="text" id="ingredients" required />
+
+    <label>Dietary Needs:</label>
+    <input type="text" id="dietary" required />
+
+    <button type="submit">Get Recipe</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script>
+    const form = document.getElementById('recipeForm');
+    const output = document.getElementById('output');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ingredients = document.getElementById('ingredients').value;
+      const dietary = document.getElementById('dietary').value;
+
+      const response = await fetch('http://localhost:5000/get-recipe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ingredients, dietary }),
+      });
+
+      const data = await response.json();
+      output.innerText = data.recipe || "No recipe found.";
+    });
+  </script>
+</body>
+</html>
