@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from 'react';
 
-const GroceryListTab = ({ 
-  selectedMeals,
+const GroceryListTab = ({
+  selectedMeals, // This prop now receives 'mealsForGroceryList' from App.js
   pantryItems,
-  showMessage
+  showMessage,
+  user, // Receive user prop
+  db, // Receive db prop
+  appId // Receive appId prop
 }) => {
   const [categorizedList, setCategorizedList] = useState({});
   const [optimizationSuggestions, setOptimizationSuggestions] = useState([]);
 
   useEffect(() => {
-    if (selectedMeals.length > 0) {
+    // This useEffect will now react to changes in 'mealsForGroceryList'
+    if (selectedMeals.length > 0 || pantryItems.length > 0) { // Also react to pantry changes
       generateGroceryList();
+    } else {
+      setCategorizedList({}); // Clear list if no meals are selected for grocery
+      setOptimizationSuggestions([]);
     }
-  }, [selectedMeals, pantryItems]);
+  }, [selectedMeals, pantryItems]); // 'selectedMeals' here refers to the prop passed for grocery list generation
 
   const normalizeIngredientName = (name) => {
     return name.toLowerCase()
       .replace(/s$/, '')
-      .replace(/(\s*(diced|chopped|sliced|fresh|canned|dried|ground))\s*/g, '');
+      .replace(/(\s*(diced|chopped|sliced|fresh|canned|dried|ground))\\s*/g, '');
   };
 
   const capitalizeWords = (str) => {
@@ -35,7 +42,8 @@ const GroceryListTab = ({
         const normalizedItem = normalizeIngredientName(ingredient.item);
         const scaledQuantity = ingredient.quantity * scalingFactor;
 
-        if (!pantryItems.includes(normalizedItem)) {
+        // Check if item is in pantry (normalized)
+        if (!pantryItems.some(p => normalizeIngredientName(p.name) === normalizedItem)) {
           missingIngredients.add(normalizedItem);
         }
 
@@ -55,7 +63,8 @@ const GroceryListTab = ({
 
     const categorized = {};
     combinedIngredients.forEach(ing => {
-      if (!pantryItems.includes(normalizeIngredientName(ing.item))) {
+      // Only add to grocery list if not in pantry
+      if (!pantryItems.some(p => normalizeIngredientName(p.name) === normalizeIngredientName(ing.item))) {
         const category = ing.category;
         if (!categorized[category]) {
           categorized[category] = [];
@@ -76,12 +85,6 @@ const GroceryListTab = ({
       'Parmesan cheese', 'Canned diced tomatoes', 'Olive oil', 'Garlic'
     ];
 
-    pantryItems.forEach(item => {
-      if (suggestedPantryUses.includes(capitalizeWords(item))) {
-        suggestions.push(`Consider using your existing ${capitalizeWords(item)} in other recipes this week.`);
-      }
-    });
-
     // Check for unused pantry items
     if (pantryItems.length > 0 && selectedMeals.length > 0) {
       const allRecipeIngredients = new Set();
@@ -90,8 +93,9 @@ const GroceryListTab = ({
       });
 
       pantryItems.forEach(pantryItem => {
-        if (!allRecipeIngredients.has(pantryItem)) {
-          suggestions.push(`You have ${capitalizeWords(pantryItem)} in your pantry that wasn't used in your selected meals. Can you find another use for it?`);
+        const normalizedPantryItem = normalizeIngredientName(pantryItem.name);
+        if (!allRecipeIngredients.has(normalizedPantryItem)) {
+          suggestions.push(`You have ${capitalizeWords(pantryItem.name)} in your pantry that wasn't used in your selected meals. Can you find another use for it?`);
         }
       });
     }
@@ -102,14 +106,14 @@ const GroceryListTab = ({
   const sortedCategories = Object.keys(categorizedList).sort();
 
   return (
-    <div className="tab-content-container">
-      <section id="groceryListSection">
+    <div className="tab-content-container overflow-y-auto max-h-[calc(100vh-250px)]">
+      <section id="groceryListSection" className="p-6 bg-white rounded-xl shadow-inner">
         <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">Your Smart Grocery List</h2>
         <div id="groceryList" className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {sortedCategories.length === 0 ? (
             <p className="text-gray-500 text-center col-span-full">
-              {selectedMeals.length === 0 
-                ? 'Select meals on the "Meal Plan & Pantry" tab to generate your grocery list.'
+              {selectedMeals.length === 0
+                ? 'Select meals on the "Meal Plan" tab to generate your grocery list.'
                 : 'All ingredients for your selected meals are already in your pantry!'}
             </p>
           ) : (

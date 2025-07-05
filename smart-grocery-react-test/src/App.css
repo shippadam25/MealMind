@@ -2,6 +2,15 @@
 body {
     font-family: 'Inter', sans-serif;
     background-color: #f3f4f6;
+    /* Removed overflow: hidden; to allow scrolling */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    /* Changed to overflow-y: auto to allow vertical scrolling on the body if content overflows */
+    overflow-y: auto;
+    flex-direction: column; /* Stack header and container vertically */
 }
 
 .container {
@@ -10,8 +19,14 @@ body {
     padding: 2rem;
     background-color: #ffffff;
     border-radius: 1rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
                 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    /* Added flex-grow to allow the container to take up available space */
+    flex-grow: 1;
+    /* Set a min-height to ensure it takes up space even with little content */
+    min-height: 70vh; /* Adjust as needed */
+    display: flex;
+    flex-direction: column;
 }
 
 /* Tab System */
@@ -66,15 +81,18 @@ body {
     padding: 1.5rem;
     border-bottom-left-radius: 0.75rem;
     border-bottom-right-radius: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
                 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    /* Ensure the tab content container can grow and has its own scroll if needed */
+    flex-grow: 1;
+    /* The max-height for MealPlanTab is handled within MealPlanTab.js */
 }
 
 /* Card Styles */
 .card {
     background-color: #ffffff;
     border-radius: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
                 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     padding: 1.5rem;
 }
@@ -86,7 +104,7 @@ body {
     font-weight: 600;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
                 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: background-color 200ms ease;
     border: none;
@@ -122,8 +140,8 @@ body {
 }
 
 /* Form Elements */
-input[type="text"], 
-select, 
+input[type="text"],
+select,
 textarea {
     width: 100%;
     padding: 0.75rem;
@@ -133,8 +151,8 @@ textarea {
     font-size: 1rem;
 }
 
-input[type="text"]:focus, 
-select:focus, 
+input[type="text"]:focus,
+select:focus,
 textarea:focus {
     outline: 2px solid transparent;
     outline-offset: 2px;
@@ -377,4 +395,398 @@ textarea:focus {
 
 .shadow-inner {
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Login Page Specific Styles */
+
+/* Back Button Styling */
+.back-button {
+    position: absolute; /* Position it relative to the body */
+    top: 20px; /* Adjust as needed */
+    left: 20px; /* Adjust as needed */
+    background-color: #6b7280; /* Gray background */
+    color: #ffffff; /* White text */
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+.back-button:hover {
+    background-color: #4b5563; /* Darker gray on hover */
+}
+
+
+/* Header for the login page */
+#login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    padding-top: 0;
+    position: static;
+    width: auto;
+}
+
+/* Main container for the login/signup form */
+#login-container {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    width: 90vw;
+    height: 90vh;
+    max-width: none;
+    min-height: auto;
+    margin-bottom: 0;
+}
+
+/* Styling for the sign-up and sign-in form containers */
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+/* Active state for the login container, triggered by JavaScript (e.g., adding 'right-panel-active' class) */
+#login-container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+    opacity: 0;
+    z-index: 1;
+}
+
+#login-container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+/* Keyframe animation for showing the sign-up form */
+@keyframes show {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+/* General form styling */
+.form-container form {
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 3.5rem;
+    height: 100%;
+    text-align: center;
+}
+
+/* Titles within forms (e.g., "Create Account", "Sign in") */
+.form-container h1 {
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    color: #1f2937;
+    font-size: 1.875rem;
+}
+
+/* Social icons container */
+.social-container {
+    margin: 1.25rem 0;
+}
+
+.social {
+    border: 1px solid #d1d5db;
+    border-radius: 9999px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0.4rem;
+    height: 2.75rem;
+    width: 2.75rem;
+    color: #4b5563;
+    transition: color 200ms ease;
+    text-decoration: none;
+}
+
+.social:hover {
+    color: #3b82f6;
+}
+
+/* "or use your email for registration" text */
+.form-container span {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin-bottom: 1.25rem;
+}
+
+/* Input fields */
+.form-container input {
+    background-color: #f3f4f6;
+    border: none;
+    padding: 0.9rem 1.1rem;
+    margin: 0.6rem 0;
+    width: 100%;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+}
+
+.form-container input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #3b82f6;
+}
+
+/* Forgot password link */
+#forgot-password {
+    color: #4b5563;
+    font-size: 0.9rem;
+    margin: 1.25rem 0;
+    text-decoration: none;
+    transition: all 200ms ease;
+}
+
+#forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Button styles for Sign In/Up forms */
+.form-container button {
+    border-radius: 9999px;
+    border: 1px solid #3b82f6;
+    background-color: #3b82f6;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.8rem 3.25rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in-out, background-color 200ms ease, border-color 200ms ease;
+    margin-top: 1.25rem;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    transform: scale(1.05);
+}
+
+/* Overlay Container */
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+#login-container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+}
+
+/* Overlay itself (the colored background with panels) */
+.overlay {
+    background: #3b82f6;
+    background: linear-gradient(to right, #3b82f6, #2563eb);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #ffffff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+#login-container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+/* Overlay Panels (Left and Right) */
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 2.5rem;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+#login-container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+#login-container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+/* Overlay Panel Titles */
+.overlay-panel h1 {
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    font-size: 1.875rem;
+}
+
+/* Overlay Panel Paragraphs */
+.overlay-panel p {
+    font-size: 1.1rem;
+    line-height: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Ghost button for overlay panels */
+.ghost {
+    background-color: transparent;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.8rem 3.25rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 9999px;
+    transition: background-color 80ms ease, color 80ms ease;
+    cursor: pointer;
+}
+
+.ghost:hover {
+    background-color: #ffffff;
+    color: #3b82f6;
+}
+
+/* Specific positioning for form containers within the main container */
+#sign-up-container {
+    transform: translateX(0%);
+}
+
+#sign-in-container {
+    transform: translateX(0%);
+}
+
+/* Adjustments for the JavaScript-driven panel active state */
+#login-container.right-panel-active #sign-in-container {
+    transform: translateX(100%);
+}
+
+#login-container.right-panel-active #sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    #login-container {
+        max-width: 95%;
+        min-height: 580px;
+        flex-direction: column;
+    }
+
+    .form-container {
+        width: 100%;
+        height: 50%;
+        position: relative;
+        transition: none;
+    }
+
+    .sign-in-container,
+    .sign-up-container {
+        transform: none;
+        opacity: 1;
+        z-index: 1;
+        height: 100%;
+    }
+
+    /* Hide one form and show the other using display property for mobile */
+    #login-container.right-panel-active .sign-in-container {
+        display: none;
+    }
+    #login-container:not(.right-panel-active) .sign-up-container {
+        display: none;
+    }
+
+    .overlay-container {
+        display: none;
+    }
+
+    #login-header {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-container form {
+        padding: 1rem;
+    }
+
+    .form-container h1 {
+        font-size: 1.6rem;
+    }
+
+    .form-container input {
+        padding: 0.7rem;
+        margin: 0.5rem 0;
+    }
+
+    .form-container button, .ghost {
+        padding: 0.6rem 2.5rem;
+        font-size: 0.85rem;
+    }
+
+    .social {
+        height: 2.5rem;
+        width: 2.5rem;
+    }
+
+    .back-button {
+        top: 10px;
+        left: 10px;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
 }

@@ -9,17 +9,24 @@ const HomeTab = ({ setActiveTab }) => {
         Reduce food waste and save time on your shopping trips.
       </p>
       <div className="mt-8 flex justify-center gap-4">
-        <button 
-          className="btn-primary" 
+        <button
+          className="btn-primary"
           onClick={() => setActiveTab('meal-plan')}
         >
           Start Planning Meals
         </button>
-        <button 
-          className="btn-secondary" 
+        <button
+          className="btn-secondary"
           onClick={() => setActiveTab('grocery-list')}
         >
           View Your Grocery List
+        </button>
+        {/* New Login Button */}
+        <button
+          className="btn-secondary" // You might want a different style for this button
+          onClick={() => setActiveTab('login')} // Assuming 'login' would be a new tab/state
+        >
+          Login
         </button>
       </div>
     </div>
