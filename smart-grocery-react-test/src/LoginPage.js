@@ -98,8 +98,15 @@ const LoginPage = ({ showMessage, onLoginSuccess, setActiveTab, authReady, fireb
           <form id="sign-up-form" onSubmit={handleSignUpSubmit}>
             <h1 id="sign-up-title">Create Account</h1>
             <div id="sign-up-social" className="social-container">
+              {/* Replaced Font Awesome icon with inline SVG for Google logo */}
               <a href="#" className="social" onClick={handleGoogleSignIn}>
-                <i className="fab fa-google-plus-g"></i>
+                <svg viewBox="0 0 48 48" width="24px" height="24px" style={{ display: 'block' }}>
+                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.6-6.44C38.71 3.82 32.65 1 24 1 14.32 1 5.92 6.5 2.18 14.85l7.74 6.02C12.42 12.55 17.71 9.5 24 9.5z"></path>
+                  <path fill="#4285F4" d="M46.72 24.5c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.27 5.48-4.9 7.27l7.74 6.02c4.51-4.18 7.15-10.59 7.15-18.74z"></path>
+                  <path fill="#FBBC04" d="M9.21 28.1c-.91-2.61-.91-5.32 0-7.93l-7.74-6.02C1.4 17.54 1 20.2 1 24c0 3.79.4 6.46 1.45 8.71l7.76 6.07c-2.43-4.18-3.95-8.71-3.95-13.08z"></path>
+                  <path fill="#34A853" d="M24 47c6.28 0 11.75-2.06 15.66-5.6l-7.74-6.02c-2.48 1.6-5.64 2.62-7.92 2.62-6.29 0-11.64-4.22-13.68-9.91l-7.74 6.02C5.92 41.5 14.32 47 24 47z"></path>
+                  <path fill="none" d="M0 0h48v48H0z"></path>
+                </svg>
               </a>
             </div>
             <span id="sign-up-or">or use your email for registration</span>
@@ -138,8 +145,15 @@ const LoginPage = ({ showMessage, onLoginSuccess, setActiveTab, authReady, fireb
           <form id="sign-in-form" onSubmit={handleSignInSubmit}>
             <h1 id="sign-in-title">Sign in</h1>
             <div id="sign-in-social" className="social-container">
+              {/* Replaced Font Awesome icon with inline SVG for Google logo */}
               <a href="#" className="social" onClick={handleGoogleSignIn}>
-                <i className="fab fa-google-plus-g"></i>
+                <svg viewBox="0 0 48 48" width="24px" height="24px" style={{ display: 'block' }}>
+                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.6-6.44C38.71 3.82 32.65 1 24 1 14.32 1 5.92 6.5 2.18 14.85l7.74 6.02C12.42 12.55 17.71 9.5 24 9.5z"></path>
+                  <path fill="#4285F4" d="M46.72 24.5c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.27 5.48-4.9 7.27l7.74 6.02c4.51-4.18 7.15-10.59 7.15-18.74z"></path>
+                  <path fill="#FBBC04" d="M9.21 28.1c-.91-2.61-.91-5.32 0-7.93l-7.74-6.02C1.4 17.54 1 20.2 1 24c0 3.79.4 6.46 1.45 8.71l7.76 6.07c-2.43-4.18-3.95-8.71-3.95-13.08z"></path>
+                  <path fill="#34A853" d="M24 47c6.28 0 11.75-2.06 15.66-5.6l-7.74-6.02c-2.48 1.6-5.64 2.62-7.92 2.62-6.29 0-11.64-4.22-13.68-9.91l-7.74 6.02C5.92 41.5 14.32 47 24 47z"></path>
+                  <path fill="none" d="M0 0h48v48H0z"></path>
+                </svg>
               </a>
             </div>
             <span id="sign-in-or">or use your account</span>
