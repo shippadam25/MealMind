@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saved Recipes</title>
+  <link rel="stylesheet" href="style1.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="banner">
+    <img src="Logo.jpg" alt="Banner Image" class="logo">
+    <button id="userIcon" title="Login">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="nav-tabs">
+    <a href="index1.html" class="tab">Recipe Generator</a>
+    <a href="grocery.html" class="tab">Grocery List</a>
+    <a href="savedRecipes.html" class="tab active">Saved Recipes</a>
+  </nav>
+
+  <main>
+    <section class="form-section">
+      <h1>Saved Recipes *temp*</h1>
+      <div id="savedRecipes" class="saved-recipes">
+        <!-- Placeholder recipes -->
+        <div class="recipe-card">
+          <h2>Grilled Chicken with Broccoli</h2>
+          <p>A simple, healthy dinner with grilled chicken, steamed broccoli, and a garlic-lemon sauce.</p>
+        </div>
+
+        <div class="recipe-card">
+          <h2>Vegan Stir Fry</h2>
+          <p>Colorful veggies and tofu stir-fried in sesame oil with soy sauce and ginger.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('userIcon').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+
+    // Future: Load saved recipes from localStorage or backend API
+    // Example:
+    // const saved = JSON.parse(localStorage.getItem('savedRecipes') || '[]');
+    // const container = document.getElementById('savedRecipes');
+    // container.innerHTML = saved.map(r => `<div class="recipe-card"><h2>${r.title}</h2><p>${r.description}</p></div>`).join('');
+  </script>
+</body>
+</html>
