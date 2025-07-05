@@ -12,6 +12,32 @@ header {
   padding: 10px 0;
   position: relative;
 }
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  background-color: #e0ffe0;
+  padding: 10px 0;
+  border-bottom: 2px solid #ccc;
+}
+
+.tab {
+  margin: 0 20px;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.tab:hover {
+  background-color: #c0ffc0;
+}
+
+.tab.active {
+  background-color: #66bb6a;
+  color: white;
+}
 
 .banner {
   background-color: #41973e;
@@ -119,4 +145,5 @@ button:hover {
     margin: 10px;
     padding: 20px;
   }
+  
 }
