@@ -55,7 +55,7 @@
       const ingredients = document.getElementById('ingredients').value;
       const dietary = document.getElementById('dietary').value;
 
-      output.innerHTML = `<p>Generating recipe...</p>`;
+      output.innerText = `Generating recipe...`;
 
       try {
         const response = await fetch('http://localhost:5000/get-recipe', {
@@ -65,7 +65,7 @@
         });
 
         const data = await response.json();
-        output.innerHTML = `<pre>${data.recipe || "No recipe found."}</pre>`;
+        output.innerText = `${data.recipe || "No recipe found."}`;
       } catch {
         output.innerHTML = `<p style="color:red;">Failed to fetch recipe.</p>`;
       }

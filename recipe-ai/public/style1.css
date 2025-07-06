@@ -38,6 +38,29 @@ header {
   background-color: #66bb6a;
   color: white;
 }
+.recipe-block {
+  display: block;
+  width: 100%;
+  max-width: 700px;
+  margin: 20px auto;
+  background-color: #f4fff4;
+  border: 1px solid #cce5cc;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.recipe-block h2 {
+  margin-top: 0;
+  color: #2e7d32;
+  font-size: 1.4rem;
+}
+
+.recipe-block p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
 
 .banner {
   background-color: #41973e;
@@ -123,15 +146,17 @@ button:hover {
 
 /* Recipe Output */
 .recipe-output {
-  max-width: 700px;
-  margin: 20px auto;
+  text-align: center;
+  max-width: 500px;
+  margin: 0px auto;
   background: white;
   padding: 25px;
   border-radius: 15px;
   white-space: pre-wrap;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  font-family: 'Courier New', monospace;
+  font-family: 'Ariel', monospace;
   font-size: 16px;
+  word-wrap: normal;
 }
 
 /* Responsive */

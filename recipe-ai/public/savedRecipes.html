@@ -28,17 +28,17 @@
   <main>
     <section class="form-section">
       <h1>Saved Recipes *temp*</h1>
-      <div id="savedRecipes" class="saved-recipes">
-        <!-- Placeholder recipes -->
-        <div class="recipe-card">
-          <h2>Grilled Chicken with Broccoli</h2>
-          <p>A simple, healthy dinner with grilled chicken, steamed broccoli, and a garlic-lemon sauce.</p>
-        </div>
 
-        <div class="recipe-card">
+      <div id="savedRecipes">
+        <article class="recipe-block">
+          <h2>Grilled Chicken with Broccoli</h2>
+          <p>This dish features tender grilled chicken served with steamed broccoli and a garlic-lemon sauce. Perfect for a healthy dinner.</p>
+        </article>
+
+        <article class="recipe-block">
           <h2>Vegan Stir Fry</h2>
-          <p>Colorful veggies and tofu stir-fried in sesame oil with soy sauce and ginger.</p>
-        </div>
+          <p>A colorful mix of bell peppers, carrots, snap peas, and tofu stir-fried in sesame oil, soy sauce, and fresh ginger. Quick and satisfying.</p>
+        </article>
       </div>
     </section>
   </main>
@@ -48,11 +48,14 @@
       window.location.href = 'login.html';
     });
 
-    // Future: Load saved recipes from localStorage or backend API
-    // Example:
+    // Future: Dynamically load saved recipes
     // const saved = JSON.parse(localStorage.getItem('savedRecipes') || '[]');
     // const container = document.getElementById('savedRecipes');
-    // container.innerHTML = saved.map(r => `<div class="recipe-card"><h2>${r.title}</h2><p>${r.description}</p></div>`).join('');
+    // container.innerHTML = saved.map(r => `
+    //   <article class="recipe-block">
+    //     <h2>${r.title}</h2>
+    //     <p>${r.description}</p>
+    //   </article>`).join('');
   </script>
 </body>
 </html>
