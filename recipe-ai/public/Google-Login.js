@@ -5,9 +5,9 @@ const GOOGLE_CLIENT_ID = '702852647652-2a1a7uv3e8m1rfurrinvo43n2q59q8vn.apps.goo
 function initializeGoogleSignIn() {
     google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleSignIn, // (still required, even with redirect)
+    callback: handleGoogleSignIn,
     ux_mode: "redirect",
-    login_uri: "http://127.0.0.1:5500/index.html" // 👈 Where Google redirects after login
+    login_uri: "http://127.0.0.1:5500/recipe-ai/public/index.html" // 👈 Where Google redirects after login
   });
 
   // Render buttons
