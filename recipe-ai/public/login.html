@@ -9,6 +9,8 @@
     rel="stylesheet"
   />
   <link rel="stylesheet" href="style.css" />
+  <!-- Load Google Sign-In script first -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <h2 id="login-header">Sign in/up Form</h2>
@@ -54,6 +56,8 @@
       </div>
     </div>
   </div>
-  <script src="script.js"></script>
+  
+  <!-- Load your custom script after Google script -->
+  <script src="Google-Login.js"></script>
 </body>
 </html>

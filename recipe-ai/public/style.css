@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 body {
   font-family: Arial, sans-serif;
   padding: 0px;
@@ -29,8 +30,6 @@ button {
 }
 
 /* Login style */
-
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
 #login-container * {
     box-sizing: border-box;

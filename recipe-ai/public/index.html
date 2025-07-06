@@ -25,8 +25,13 @@
       window.location.href = 'login.html';
       });
     </script>
-    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </header>
+  
+  <!-- Welcome message for logged-in users -->
+  <div id="welcomeMessage" style="display: none; background-color: #4CAF50; color: white; padding: 10px; text-align: center; margin-bottom: 20px;">
+    Welcome back, <span id="userName"></span>!
+  </div>
   
   <form id="recipeForm">
     <label>Ingredients:</label>
@@ -59,5 +64,53 @@
       output.innerText = data.recipe || "No recipe found.";
     });
   </script>
+
+  <script>
+    // Add Google Sign-In initialization for index.html
+    const GOOGLE_CLIENT_ID = '702852647652-2a1a7uv3e8m1rfurrinvo43n2q59q8vn.apps.googleusercontent.com';
+    
+    function initializeGoogleSignInForIndex() {
+        if (typeof google !== 'undefined' && google.accounts) {
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: (response) => {
+                    // Handle sign-in on index page if needed
+                    console.log('Google Sign-In on index page:', response);
+                }
+            });
+        }
+    }
+    
+    // Handle Google Sign-In redirect and show welcome message
+    window.addEventListener('load', () => {
+      // Check if user data is in URL parameters (from Google Sign-In)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('name')) {
+        // User just logged in, show welcome message
+        const userName = urlParams.get('name');
+        const userEmail = urlParams.get('email');
+        
+        // Show welcome message
+        document.getElementById('welcomeMessage').style.display = 'block';
+        document.getElementById('userName').textContent = userName;
+        
+        // Update user icon to show they're logged in
+        const userIcon = document.getElementById('userIcon');
+        userIcon.style.color = '#4CAF50';
+        userIcon.title = `Logged in as ${userName}`;
+        
+        console.log('Welcome back,', userName);
+        
+        // Clean up URL parameters after a short delay
+        setTimeout(() => {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }, 2000);
+      }
+      
+      // Initialize Google Sign-In
+      setTimeout(initializeGoogleSignInForIndex, 1000);
+    });
+  </script>
+
 </body>
 </html>
