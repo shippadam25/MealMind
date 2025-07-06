@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 body {
   font-family: Arial, sans-serif;
   padding: 0px;
@@ -25,12 +26,10 @@ button {
   white-space: pre-wrap;
   background: #fff;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 
 /* Login style */
-
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
 #login-container * {
     box-sizing: border-box;
@@ -77,8 +76,8 @@ button {
 
 #login-container button {
     border-radius: 20px;
-    border: 1px solid #FF4B2B;
-    background-color: #FF4B2B;
+    border: 1px solid #41973e;
+    background-color: #41973e;
     color: #FFFFFF;
     font-size: 12px;
     font-weight: bold;
@@ -191,9 +190,9 @@ button {
 }
 
 #login-container .overlay {
-    background: #FF416C;
-    background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-    background: linear-gradient(to right, #FF4B2B, #FF416C);
+    background: #41973e;
+    background: -webkit-linear-gradient(to right, #41973e, #4CAF50);
+    background: linear-gradient(to right, #41973e, #4CAF50);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;
