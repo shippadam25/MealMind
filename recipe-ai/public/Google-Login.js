@@ -3,7 +3,7 @@ const GOOGLE_CLIENT_ID = '702852647652-2a1a7uv3e8m1rfurrinvo43n2q59q8vn.apps.goo
 
 // Initialize Google Sign-In
 function initializeGoogleSignIn() {
-  google.accounts.id.initialize({
+    google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
     callback: handleGoogleSignIn, // (still required, even with redirect)
     ux_mode: "redirect",
