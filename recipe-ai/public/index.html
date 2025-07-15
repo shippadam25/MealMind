@@ -39,7 +39,7 @@
       </form>
     </section>
 
-    <section id="output" class="recipe-output"></section>
+    <section id="output" class="recipe-output">
   </main>
 
   <script>
@@ -51,25 +51,30 @@
     const output = document.getElementById('output');
 
     form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const ingredients = document.getElementById('ingredients').value;
-      const dietary = document.getElementById('dietary').value;
+  e.preventDefault();
+  const ingredients = document.getElementById('ingredients').value;
+  const dietary = document.getElementById('dietary').value;
 
-      output.innerText = `Generating recipe...`;
+  output.innerHTML = `<p>Generating recipe...</p>`;
 
-      try {
-        const response = await fetch('http://localhost:5000/get-recipe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ingredients, dietary }),
-        });
-
-        const data = await response.json();
-        output.innerText = `${data.recipe || "No recipe found."}`;
-      } catch {
-        output.innerHTML = `<p style="color:red;">Failed to fetch recipe.</p>`;
-      }
+  try {
+    const response = await fetch('http://localhost:5000/get-recipe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ingredients, dietary }),
     });
+
+    const data = await response.json();
+
+    output.innerHTML = `
+      <img src="${data.imageUrl}" alt="Recipe Image" class="recipe-image" />
+      <pre class="recipe-text">${data.recipe}</pre>
+    `;
+  } catch {
+    output.innerHTML = `<p style="color:red;">Failed to fetch recipe.</p>`;
+  }
+});
   </script>
+  </section>
 </body>
 </html>

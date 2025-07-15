@@ -159,19 +159,37 @@ button:hover {
   background-color: #45a049;
 }
 
-/* Recipe Output */
+
+
 .recipe-output {
   text-align: center;
-  max-width: 500px;
-  margin: 0px auto;
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 800px;
+  margin: 20px auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
   white-space: pre-wrap;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  font-family: 'Ariel', monospace;
+  box-sizing: border-box;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-size: 16px;
-  word-wrap: normal;
+}
+
+.recipe-text {
+  font-size: 16px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  font-family: inherit;
+}
+
+.recipe-image {
+  width: 100%;
+  max-width: 200px;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto 20px;
 }
 
 /* Responsive */

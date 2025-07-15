@@ -19,14 +19,29 @@ app.post('/get-recipe', async (req, res) => {
       model: "gpt-4.1",
       messages: [{
         role: "user",
-        content: `Give me a recipe using these ingredients: ${ingredients}. It should be suitable for: ${dietary}. Respond with ingredients, steps, and title.`,
+        content: `Give me a recipe using these ingredients: ${ingredients}. It should be suitable for: ${dietary}. Respond with ingredients, steps, and title. Also add a blank line inbetween each step`,
       }],
     });
 
-    res.json({ recipe: completion.choices[0].message.content });
+    const recipe = completion.choices[0].message.content;
+
+    // Extract title (assumes first line is title)
+    const title = recipe.split('\n')[0].replace(/^#+\s*/, '');
+
+    // Generate image based on the title
+    const imageResponse = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: `A basic dish of ${title}, keeping to these ingredients if possible: ${ingredients}, professional food photography, high quality`,
+      n: 1,
+      size: "1024x1024",
+    });
+
+    const imageUrl = imageResponse.data[0].url;
+
+    res.json({ recipe, imageUrl });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Failed to fetch recipe.");
+    res.status(500).send("Failed to fetch recipe or image.");
   }
 });
 
