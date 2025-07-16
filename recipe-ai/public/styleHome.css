@@ -159,7 +159,49 @@ button:hover {
   background-color: #45a049;
 }
 
+.tab-section {
+  display: none;
+}
+.tab-section h1 {
 
+}
+
+.tab-section.active {
+  display: block;
+}
+
+.nav-tabs button.tab {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.nav-tabs button.active {
+  border-bottom: 2px solid green;
+  color: green;
+}
+
+.output-box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.output-box h1 {
+  text-align: center;
+  color: #198754;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
 
 .recipe-output {
   text-align: center;

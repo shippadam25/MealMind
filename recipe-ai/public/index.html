@@ -20,27 +20,42 @@
 
   <!-- Navigation Tabs -->
   <nav class="nav-tabs">
-    <a href="index.html" class="tab active">Recipe Generator</a>
-    <a href="grocery.html" class="tab">Grocery List</a>
-    <a href="savedRecipes.html" class="tab">Saved Recipes</a>
-  </nav>
+  <button class="tab" data-tab="grocery">Grocery List</button>
+  <button class="tab active" data-tab="generator">Recipe Generator</button>
+  <button class="tab" data-tab="saved">Saved Recipes</button>
+</nav>
 
   <main>
-    <section class="form-section">
+  <!-- Recipe Generator -->
+  <section id="tab-generator" class="tab-section active">
+    <div class="form-section">
       <h1>AI Recipe Generator</h1>
       <form id="recipeForm">
         <label for="ingredients">Ingredients</label>
         <input type="text" id="ingredients" placeholder="e.g. chicken, rice, broccoli" required />
-
         <label for="dietary">Dietary Needs</label>
         <input type="text" id="dietary" placeholder="e.g. gluten-free, vegan" required />
-
         <button type="submit">Get Recipe</button>
       </form>
-    </section>
+    </div>
+    <section id="output" class="recipe-output"></section>
+  </section>
 
-    <section id="output" class="recipe-output">
-  </main>
+  <!-- Grocery List -->
+<section id="tab-grocery" class="tab-section">
+  <div class="output-box" id="groceryOutput">
+    <h1>Grocery List</h1>
+    <p>(Your grocery list will appear here...)</p>
+  </div>
+</section>
+
+  <!-- Saved Recipes -->
+<section id="tab-saved" class="tab-section">
+  <div class="output-box" id="savedOutput">
+    <h1>Saved Recipes</h1>
+    <p>(Your saved recipes will appear here...)</p>
+  </div>
+</section>
 
   <script>
     document.getElementById('userIcon').addEventListener('click', () => {
@@ -50,7 +65,7 @@
     const form = document.getElementById('recipeForm');
     const output = document.getElementById('output');
 
-    form.addEventListener('submit', async (e) => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const ingredients = document.getElementById('ingredients').value;
   const dietary = document.getElementById('dietary').value;
@@ -66,13 +81,47 @@
 
     const data = await response.json();
 
-    output.innerHTML = `
-      <img src="${data.imageUrl}" alt="Recipe Image" class="recipe-image" />
-      <pre class="recipe-text">${data.recipe}</pre>
-    `;
+    // Store in localStorage (optional)
+    localStorage.setItem('latestRecipe', JSON.stringify(data));
+
+    displayRecipe(data);
+    displayGroceryList(data.groceryList);
+
   } catch {
     output.innerHTML = `<p style="color:red;">Failed to fetch recipe.</p>`;
   }
+});
+
+function displayRecipe(data) {
+  output.innerHTML = `
+    <img src="${data.imageUrl}" alt="Recipe Image" class="recipe-image" />
+    <pre class="recipe-text">${data.recipe}</pre>
+  `;
+}
+
+function displayGroceryList(groceryText) {
+  const groceryBox = document.getElementById('groceryOutput');
+  groceryBox.innerHTML = `
+    <h1>Grocery List</h1>
+    <p>Additional ingredients to shop for:</p>
+    <ul>
+      ${groceryText.split(',').map(item => `<li>${item.trim()}</li>`).join('')}
+    </ul>
+  `;
+}
+document.querySelectorAll('.nav-tabs .tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Switch active tab button
+    document.querySelectorAll('.nav-tabs .tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show corresponding tab section
+    const tabId = btn.getAttribute('data-tab');
+    document.querySelectorAll('.tab-section').forEach(section => {
+      section.classList.remove('active');
+    });
+    document.getElementById('tab-' + tabId).classList.add('active');
+  });
 });
   </script>
   </section>
