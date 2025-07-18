@@ -46,7 +46,7 @@ $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
 
-if ($stmt->num_rows == 1) {
+if ($stmt->num_rows == 1) 
     $stmt->bind_result($user_id, $username, $hashed_password);
     $stmt->fetch();
 
