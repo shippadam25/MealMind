@@ -162,9 +162,6 @@ button:hover {
 .tab-section {
   display: none;
 }
-.tab-section h1 {
-
-}
 
 .tab-section.active {
   display: block;
