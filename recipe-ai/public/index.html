@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Recipe Generator</title>
-  <link rel="stylesheet" href="styleHome.css" />
+  <link rel="stylesheet" href="styleHome.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -16,6 +16,7 @@
         <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
       </svg>
     </button>
+    <h1 id="welcomeMessage" style="display:none;">Welcome!</h1> <!-- ''Welcome message once the user sign in, need style. -->
   </header>
 
   <!-- Navigation Tabs -->
@@ -26,37 +27,37 @@
 </nav>
 
   <main>
-  <!-- Recipe Generator -->
-  <section id="tab-generator" class="tab-section active">
-    <div class="form-section">
-      <h1>AI Recipe Generator</h1>
-      <form id="recipeForm">
-        <label for="ingredients">Ingredients</label>
-        <input type="text" id="ingredients" placeholder="e.g. chicken, rice, broccoli" required />
-        <label for="dietary">Dietary Needs</label>
-        <input type="text" id="dietary" placeholder="e.g. gluten-free, vegan" required />
-        <button type="submit">Get Recipe</button>
-      </form>
-    </div>
-    <section id="output" class="recipe-output"></section>
-  </section>
+      <!-- Recipe Generator -->
+      <section id="tab-generator" class="tab-section active">
+        <div class="form-section">
+          <h1>AI Recipe Generator</h1>
+          <form id="recipeForm">
+            <label for="ingredients">Ingredients</label>
+            <input type="text" id="ingredients" placeholder="e.g. chicken, rice, broccoli" required>
+            <label for="dietary">Dietary Needs</label>
+            <input type="text" id="dietary" placeholder="e.g. gluten-free, vegan" required>
+            <button type="submit">Get Recipe</button>
+          </form>
+        </div>
+        <section id="output" class="recipe-output"></section>
+      </section>
 
-  <!-- Grocery List -->
-<section id="tab-grocery" class="tab-section">
-  <div class="output-box" id="groceryOutput">
-    <h1>Grocery List</h1>
-    <p>(Your grocery list will appear here...)</p>
-  </div>
-</section>
+      <!-- Grocery List -->
+    <section id="tab-grocery" class="tab-section">
+      <div class="output-box" id="groceryOutput">
+        <h1>Grocery List</h1>
+        <p>(Your grocery list will appear here...)</p>
+      </div>
+    </section>
 
-  <!-- Saved Recipes -->
-<section id="tab-saved" class="tab-section">
-  <div class="output-box" id="savedOutput">
-    <h1>Saved Recipes</h1>
-    <p>(Your saved recipes will appear here...)</p>
-  </div>
-</section>
-
+      <!-- Saved Recipes -->
+    <section id="tab-saved" class="tab-section">
+      <div class="output-box" id="savedOutput">
+        <h1>Saved Recipes</h1>
+        <p>(Your saved recipes will appear here...)</p>
+      </div>
+    </section>
+  </main>
   <script>
     document.getElementById('userIcon').addEventListener('click', () => {
       window.location.href = 'login.html';
@@ -124,6 +125,27 @@ document.querySelectorAll('.nav-tabs .tab').forEach(btn => {
   });
 });
   </script>
-  </section>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const username = localStorage.getItem('username');
+
+    if (username) {
+      const welcome = document.getElementById('welcomeMessage');
+      welcome.textContent = `Welcome, ${username}!`;
+      welcome.style.display = 'block';
+    }
+    // else do nothing, no redirect
+
+    // Optional: account button click handler
+    const accountBtn = document.getElementById('accountBtn');
+    if (accountBtn) {
+      accountBtn.addEventListener('click', () => {
+        window.location.href = 'profile.html';
+      });
+    }
+  });
+</script>
+
 </body>
+
 </html>
