@@ -67,11 +67,11 @@ async function handleRegularSignup(name, email, password) {
   }
 }
 
-// Handle regular signin
 async function handleRegularSignin(email, password) {
   try {
     const response = await fetch('http://localhost/recipe-ai/public/login.php', {
       method: 'POST',
+      credentials: 'include',    // << Add this to send cookies/session
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -81,16 +81,16 @@ async function handleRegularSignin(email, password) {
       })
     });
 
-    const result = await response.text();  // <-- get plain text
+    const result = await response.json();  // <-- parse JSON now
 
-    if (result === 'success') {
-      // Save username in localStorage (you can save the email or username from your form)
-      localStorage.setItem('username', email);
+    if (result.status === 'success') {
+      // Save the username from response, not email
+      localStorage.setItem('username', result.username);
 
       // Redirect to home page
-      window.location.href = 'http://127.0.0.1:5500/recipe-ai/public/index.html';
+      window.location.href = 'http://localhost:5500/recipe-ai/public/index.html';
     } else {
-      showError(result || 'Login failed. Please check your credentials.');
+      showError(result.message || 'Login failed. Please check your credentials.');
     }
 
   } catch (error) {
@@ -98,6 +98,7 @@ async function handleRegularSignin(email, password) {
     showError('Network error. Please try again.');
   }
 }
+
 
 // Handle traditional form submissions
 function setupRegularAuthForms() {

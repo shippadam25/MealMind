@@ -97,7 +97,10 @@ function displayRecipe(data) {
   output.innerHTML = `
     <img src="${data.imageUrl}" alt="Recipe Image" class="recipe-image" />
     <pre class="recipe-text">${data.recipe}</pre>
-  `;
+    <button id="saveRecipeBtn">Save Recipe</button>`;
+  document.getElementById('saveRecipeBtn').addEventListener('click', () => {
+    saveRecipe(data);
+  });
 }
 
 function displayGroceryList(groceryText) {
@@ -122,8 +125,96 @@ document.querySelectorAll('.nav-tabs .tab').forEach(btn => {
       section.classList.remove('active');
     });
     document.getElementById('tab-' + tabId).classList.add('active');
+
+    // If saved tab, load recipes
+    if (tabId === 'saved') {
+      loadSavedRecipes();
+    }
   });
 });
+
+async function saveRecipe(data) {
+  console.log('currentUser:', currentUser)
+  if (!currentUser) {
+    alert('Please sign in to save recipes.');
+    return;
+  }
+  const username = currentUser;
+
+  try {
+    const response = await fetch('http://localhost/recipe-ai/public/save_recipe.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',  // include session cookie
+      body: JSON.stringify({
+        username,
+        recipe: data.recipe,
+        imageUrl: data.imageUrl,
+        groceryList: data.groceryList
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.status === 'success') {
+      alert('Recipe saved!');
+    } else {
+      alert('Failed to save recipe: ' + result.message);
+    }
+  } catch (err) {
+    alert('Error saving recipe');
+    console.error(err);
+  }
+}
+
+
+async function loadSavedRecipes() {
+  const savedOutput = document.getElementById('savedOutput');
+
+  if (!currentUser) {
+    savedOutput.innerHTML = '<p>Please sign in to see saved recipes.</p>';
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost/recipe-ai/public/get_saved_recipes.php?username=${encodeURIComponent(currentUser)}`);
+    const data = await response.json();
+
+    if (data.status === 'success' && data.recipes.length) {
+      savedOutput.innerHTML = '<h1>Saved Recipes</h1>' + data.recipes.map(recipe => `
+        <div class="saved-recipe">
+          <img src="${recipe.image_url}" alt="Recipe Image" class="recipe-image" />
+          <pre>${recipe.recipe_text}</pre>
+          <p><strong>Grocery List:</strong> ${recipe.grocery_list}</p>
+          <hr/>
+        </div>
+      `).join('');
+    } else {
+      savedOutput.innerHTML = '<p>No saved recipes yet.</p>';
+    }
+  } catch (err) {
+    savedOutput.innerHTML = '<p>Error loading saved recipes.</p>';
+    console.error(err);
+  }
+}
+
+
+let currentUser = null;
+
+fetch('http://localhost/recipe-ai/public/get_user.php', {
+  credentials: 'include' // VERY important to include session
+})
+.then(res => res.json())
+.then(data => {
+  if (data.username) {
+    currentUser = data.username;
+    console.log('currentUser set to:', currentUser); // <-- here
+  } else {
+    console.log('Not logged in');
+  }
+});
+
+
   </script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
