@@ -1,0 +1,17 @@
+-- Users Table
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE,
+  email TEXT UNIQUE,
+  password TEXT
+);
+
+-- Recipes Table
+CREATE TABLE recipes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  recipe_text TEXT,
+  image_url TEXT,
+  grocery_list TEXT,
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);

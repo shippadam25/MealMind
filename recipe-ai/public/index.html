@@ -1,48 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI Recipe Generator</title>
-  <link rel="stylesheet" href="styleHome.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styleHome.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header class="banner">
-    <img src="Logo.jpg" alt="Banner Image" class="logo">
+    <img src="Logo.jpg" alt="Banner Image" class="logo" />
     <button id="userIcon" title="Login">
       <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
       </svg>
     </button>
-    <h1 id="welcomeMessage" style="display:none;">Welcome!</h1> <!-- ''Welcome message once the user sign in, need style. -->
+    <h1 id="welcomeMessage" style="display:none;">Welcome!</h1>
   </header>
 
   <!-- Navigation Tabs -->
   <nav class="nav-tabs">
-  <button class="tab" data-tab="grocery">Grocery List</button>
-  <button class="tab active" data-tab="generator">Recipe Generator</button>
-  <button class="tab" data-tab="saved">Saved Recipes</button>
-</nav>
+    <button class="tab" data-tab="grocery">Grocery List</button>
+    <button class="tab active" data-tab="generator">Recipe Generator</button>
+    <button class="tab" data-tab="saved">Saved Recipes</button>
+  </nav>
 
   <main>
-      <!-- Recipe Generator -->
-      <section id="tab-generator" class="tab-section active">
-        <div class="form-section">
-          <h1>AI Recipe Generator</h1>
-          <form id="recipeForm">
-            <label for="ingredients">Ingredients</label>
-            <input type="text" id="ingredients" placeholder="e.g. chicken, rice, broccoli" required>
-            <label for="dietary">Dietary Needs</label>
-            <input type="text" id="dietary" placeholder="e.g. gluten-free, vegan" required>
-            <button type="submit">Get Recipe</button>
-          </form>
-        </div>
-        <section id="output" class="recipe-output"></section>
-      </section>
+    <!-- Recipe Generator -->
+    <section id="tab-generator" class="tab-section active">
+      <div class="form-section">
+        <h1>AI Recipe Generator</h1>
+        <form id="recipeForm">
+          <label for="ingredients">Ingredients</label>
+          <input type="text" id="ingredients" placeholder="e.g. chicken, rice, broccoli" required />
+          <label for="dietary">Dietary Needs</label>
+          <input type="text" id="dietary" placeholder="e.g. gluten-free, vegan" required />
+          <button type="submit">Get Recipe</button>
+        </form>
+      </div>
+      <section id="output" class="recipe-output"></section>
+    </section>
 
-      <!-- Grocery List -->
+    <!-- Grocery List -->
     <section id="tab-grocery" class="tab-section">
       <div class="output-box" id="groceryOutput">
         <h1>Grocery List</h1>
@@ -50,7 +50,7 @@
       </div>
     </section>
 
-      <!-- Saved Recipes -->
+    <!-- Saved Recipes -->
     <section id="tab-saved" class="tab-section">
       <div class="output-box" id="savedOutput">
         <h1>Saved Recipes</h1>
@@ -58,185 +58,219 @@
       </div>
     </section>
   </main>
+
   <script>
-    document.getElementById('userIcon').addEventListener('click', () => {
+    // Base URL for backend API (must match server)
+    const API_BASE = 'http://localhost:5000';
+
+    const userIconBtn = document.getElementById('userIcon');
+    userIconBtn.addEventListener('click', () => {
       window.location.href = 'login.html';
     });
 
     const form = document.getElementById('recipeForm');
     const output = document.getElementById('output');
+    let currentUser = null;
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const ingredients = document.getElementById('ingredients').value;
-  const dietary = document.getElementById('dietary').value;
+    // Fetch current user from session
+    async function checkSession() {
+      try {
+        const response = await fetch(`${API_BASE}/get-user`, {
+          credentials: 'include',
+        });
+        const data = await response.json();
 
-  output.innerHTML = `<p>Generating recipe...</p>`;
+        if (data.username) {
+          currentUser = data.username;
 
-  try {
-    const response = await fetch('http://localhost:5000/get-recipe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ingredients, dietary }),
+          const welcomeMessage = document.getElementById('welcomeMessage');
+          if (welcomeMessage) {
+            welcomeMessage.textContent = `Welcome, ${currentUser}!`;
+            welcomeMessage.style.display = 'block';
+          }
+
+          // Hide login button
+          const loginBtn = document.getElementById('userIcon');
+          if (loginBtn) loginBtn.style.display = 'none';
+
+          addLogoutButton();
+        } else {
+          currentUser = null;
+          const welcomeMessage = document.getElementById('welcomeMessage');
+          if (welcomeMessage) welcomeMessage.style.display = 'none';
+
+          const loginBtn = document.getElementById('userIcon');
+          if (loginBtn) loginBtn.style.display = 'block';
+
+          removeLogoutButton();
+        }
+      } catch (err) {
+        console.error('Error checking session:', err);
+      }
+    }
+
+    // Add logout button to header
+    function addLogoutButton() {
+      let logoutBtn = document.getElementById('logoutBtn');
+      if (!logoutBtn) {
+        logoutBtn = document.createElement('button');
+        logoutBtn.id = 'logoutBtn';
+        logoutBtn.textContent = 'Logout';
+        logoutBtn.style.marginLeft = '10px';
+        logoutBtn.style.cursor = 'pointer';
+        logoutBtn.addEventListener('click', async () => {
+          try {
+            const response = await fetch(`${API_BASE}/logout`, {
+              method: 'POST',
+              credentials: 'include',
+            });
+            const data = await response.json();
+            if (data.status === 'success') {
+              window.location.reload();
+            } else {
+              alert('Logout failed.');
+            }
+          } catch (err) {
+            console.error('Logout failed:', err);
+          }
+        });
+        const header = document.querySelector('header.banner');
+        if (header) header.appendChild(logoutBtn);
+      }
+    }
+
+    // Remove logout button if exists
+    function removeLogoutButton() {
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.remove();
+    }
+
+    // Recipe form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ingredients = document.getElementById('ingredients').value.trim();
+      const dietary = document.getElementById('dietary').value.trim();
+
+      output.innerHTML = `<p>Generating recipe...</p>`;
+
+      try {
+        const response = await fetch(`${API_BASE}/get-recipe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ ingredients, dietary }),
+        });
+
+        if (!response.ok) throw new Error('Recipe request failed');
+        const data = await response.json();
+
+        localStorage.setItem('latestRecipe', JSON.stringify(data));
+
+        displayRecipe(data);
+        displayGroceryList(data.groceryList || '');
+      } catch (err) {
+        console.error(err);
+        output.innerHTML = `<p style="color:red;">Failed to fetch recipe.</p>`;
+      }
     });
 
-    const data = await response.json();
-
-    // Store in localStorage (optional)
-    localStorage.setItem('latestRecipe', JSON.stringify(data));
-
-    displayRecipe(data);
-    displayGroceryList(data.groceryList);
-
-  } catch {
-    output.innerHTML = `<p style="color:red;">Failed to fetch recipe.</p>`;
-  }
-});
-
-function displayRecipe(data) {
-  output.innerHTML = `
-    <img src="${data.imageUrl}" alt="Recipe Image" class="recipe-image" />
-    <pre class="recipe-text">${data.recipe}</pre>
-    <button id="saveRecipeBtn">Save Recipe</button>`;
-  document.getElementById('saveRecipeBtn').addEventListener('click', () => {
-    saveRecipe(data);
-  });
-}
-
-function displayGroceryList(groceryText) {
-  const groceryBox = document.getElementById('groceryOutput');
-  groceryBox.innerHTML = `
-    <h1>Grocery List</h1>
-    <p>Additional ingredients to shop for:</p>
-    <ul>
-      ${groceryText.split(',').map(item => `<li>${item.trim()}</li>`).join('')}
-    </ul>
-  `;
-}
-document.querySelectorAll('.nav-tabs .tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    // Switch active tab button
-    document.querySelectorAll('.nav-tabs .tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    // Show corresponding tab section
-    const tabId = btn.getAttribute('data-tab');
-    document.querySelectorAll('.tab-section').forEach(section => {
-      section.classList.remove('active');
-    });
-    document.getElementById('tab-' + tabId).classList.add('active');
-
-    // If saved tab, load recipes
-    if (tabId === 'saved') {
-      loadSavedRecipes();
+    function displayRecipe(data) {
+      const safeImg = data.imageUrl ? `<img src="${data.imageUrl}" alt="Recipe Image" class="recipe-image" />` : '';
+      output.innerHTML = `
+        ${safeImg}
+        <pre class="recipe-text">${data.recipe || 'No recipe text returned.'}</pre>
+        <button id="saveRecipeBtn">Save Recipe</button>
+      `;
+      document.getElementById('saveRecipeBtn').addEventListener('click', () => saveRecipe(data));
     }
-  });
-});
 
-async function saveRecipe(data) {
-  console.log('currentUser:', currentUser)
-  if (!currentUser) {
-    alert('Please sign in to save recipes.');
-    return;
-  }
-  const username = currentUser;
-
-  try {
-    const response = await fetch('http://localhost/recipe-ai/public/save_recipe.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',  // include session cookie
-      body: JSON.stringify({
-        username,
-        recipe: data.recipe,
-        imageUrl: data.imageUrl,
-        groceryList: data.groceryList
-      }),
-    });
-
-    const result = await response.json();
-
-    if (result.status === 'success') {
-      alert('Recipe saved!');
-    } else {
-      alert('Failed to save recipe: ' + result.message);
+    function displayGroceryList(groceryText) {
+      const groceryBox = document.getElementById('groceryOutput');
+      if (!groceryText) {
+        groceryBox.innerHTML = `
+          <h1>Grocery List</h1>
+          <p>No additional ingredients listed.</p>`;
+        return;
+      }
+      groceryBox.innerHTML = `
+        <h1>Grocery List</h1>
+        <p>Additional ingredients to shop for:</p>
+        <ul>
+          ${groceryText.split(',').map(item => `<li>${item.trim()}</li>`).join('')}
+        </ul>
+      `;
     }
-  } catch (err) {
-    alert('Error saving recipe');
-    console.error(err);
-  }
-}
 
-
-async function loadSavedRecipes() {
-  const savedOutput = document.getElementById('savedOutput');
-
-  if (!currentUser) {
-    savedOutput.innerHTML = '<p>Please sign in to see saved recipes.</p>';
-    return;
-  }
-
-  try {
-    const response = await fetch(`http://localhost/recipe-ai/public/get_saved_recipes.php?username=${encodeURIComponent(currentUser)}`);
-    const data = await response.json();
-
-    if (data.status === 'success' && data.recipes.length) {
-      savedOutput.innerHTML = '<h1>Saved Recipes</h1>' + data.recipes.map(recipe => `
-        <div class="saved-recipe">
-          <img src="${recipe.image_url}" alt="Recipe Image" class="recipe-image" />
-          <pre>${recipe.recipe_text}</pre>
-          <p><strong>Grocery List:</strong> ${recipe.grocery_list}</p>
-          <hr/>
-        </div>
-      `).join('');
-    } else {
-      savedOutput.innerHTML = '<p>No saved recipes yet.</p>';
-    }
-  } catch (err) {
-    savedOutput.innerHTML = '<p>Error loading saved recipes.</p>';
-    console.error(err);
-  }
-}
-
-
-let currentUser = null;
-
-fetch('http://localhost/recipe-ai/public/get_user.php', {
-  credentials: 'include' // VERY important to include session
-})
-.then(res => res.json())
-.then(data => {
-  if (data.username) {
-    currentUser = data.username;
-    console.log('currentUser set to:', currentUser); // <-- here
-  } else {
-    console.log('Not logged in');
-  }
-});
-
-
-  </script>
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const username = localStorage.getItem('username');
-
-    if (username) {
-      const welcome = document.getElementById('welcomeMessage');
-      welcome.textContent = `Welcome, ${username}!`;
-      welcome.style.display = 'block';
-    }
-    // else do nothing, no redirect
-
-    // Optional: account button click handler
-    const accountBtn = document.getElementById('accountBtn');
-    if (accountBtn) {
-      accountBtn.addEventListener('click', () => {
-        window.location.href = 'profile.html';
+    // Tab switching
+    document.querySelectorAll('.nav-tabs .tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-tabs .tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tabId = btn.getAttribute('data-tab');
+        document.querySelectorAll('.tab-section').forEach(section => section.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+        if (tabId === 'saved') loadSavedRecipes();
       });
+    });
+
+    // Save recipe to backend
+    async function saveRecipe(data) {
+      if (!currentUser) {
+        alert('Please sign in to save recipes.');
+        return;
+      }
+      try {
+        const response = await fetch(`${API_BASE}/save-recipe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            recipe: data.recipe,
+            imageUrl: data.imageUrl,
+            groceryList: data.groceryList || ''
+          }),
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+          alert('Recipe saved!');
+        } else {
+          alert('Failed to save recipe: ' + (result.message || 'Unknown error'));
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error saving recipe');
+      }
     }
-  });
-</script>
 
+    // Load saved recipes
+    async function loadSavedRecipes() {
+      const savedOutput = document.getElementById('savedOutput');
+      if (!currentUser) {
+        savedOutput.innerHTML = '<p>Please sign in to see saved recipes.</p>';
+        return;
+      }
+      try {
+        const response = await fetch(`${API_BASE}/get-saved-recipes`, { credentials: 'include' });
+        const data = await response.json();
+        if (data.status === 'success' && Array.isArray(data.recipes) && data.recipes.length) {
+          savedOutput.innerHTML = '<h1>Saved Recipes</h1>' + data.recipes.map(r => `
+            <div class="saved-recipe">
+              <img src="${r.image_url || r.imageUrl || ''}" alt="Recipe Image" class="recipe-image" />
+              <pre>${r.recipe_text || r.recipe || ''}</pre>
+              <p><strong>Grocery List:</strong> ${r.grocery_list || r.groceryList || 'None'}</p>
+            </div>
+          `).join('');
+        } else {
+          savedOutput.innerHTML = '<p>No saved recipes found.</p>';
+        }
+      } catch (err) {
+        console.error(err);
+        savedOutput.innerHTML = '<p>Error loading saved recipes.</p>';
+      }
+    }
+
+    // On load
+    checkSession();
+  </script>
 </body>
-
 </html>

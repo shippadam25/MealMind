@@ -1,84 +1,65 @@
-<?php
-header("Access-Control-Allow-Origin: http://localhost:5500");  // use exact origin of your frontend
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Credentials: true");  // allow cookies/session
-header('Content-Type: application/json');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MealMind login</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2 id="login-header">Sign in/up Form</h2>
+  <div class="container" id="login-container">
+    <div class="form-container sign-up-container" id="sign-up-container">
+      <!-- Sign Up form -->
+      <form id="sign-up-form">
+        <h1 id="sign-up-title">Create Account</h1>
+        <div class="social-container" id="sign-up-social">
+          <a href="http://localhost:5000/auth/google" class="social" id="sign-up-google">
+            <i class="fab fa-google"></i>
+          </a>
+        </div>
+        <span id="sign-up-or">or use your email for registration</span>
+        <input type="text" name="name" placeholder="Username" id="sign-up-name" required />
+        <input type="email" name="email" placeholder="Email" id="sign-up-email" required />
+        <input type="password" name="password" placeholder="Password" id="sign-up-password" required />
+        <button type="submit" id="sign-up-button">Sign Up</button>
+      </form>
+    </div>
 
-// Set session cookie parameters BEFORE session_start()
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path' => '/',
-    'domain' => '',      // usually blank for localhost
-    'secure' => false,   // false for local HTTP, true if using HTTPS
-    'httponly' => true,
-    'samesite' => 'Lax'  // 'Lax' is good for most cases, 'None' requires 'secure' true
-]);
+    <div class="form-container sign-in-container" id="sign-in-container">
+      <!-- Sign In form -->
+      <form id="sign-in-form">
+        <h1 id="sign-in-title">Sign in</h1>
+        <div class="social-container" id="sign-in-social">
+          <a href="http://localhost:5000/auth/google" class="social" id="sign-in-google">
+            <i class="fab fa-google"></i>
+          </a>
+        </div>
+        <span id="sign-in-or">or use your account</span>
+        <input type="email" name="email" placeholder="Email" id="sign-in-email" required />
+        <input type="password" name="password" placeholder="Password" id="sign-in-password" required />
+        <a href="#" id="forgot-password">Forgot your password?</a>
+        <button type="submit" id="sign-in-button">Sign In</button>
+      </form>
+    </div>
 
-session_start();
+    <div class="overlay-container" id="overlay-container">
+      <div class="overlay" id="overlay">
+        <div class="overlay-panel overlay-left" id="overlay-left">
+          <h1 id="overlay-left-title">Welcome Back!</h1>
+          <p id="overlay-left-text">To keep connected with us please login with your personal info</p>
+          <button class="ghost" id="signIn">Sign In</button>
+        </div>
+        <div class="overlay-panel overlay-right" id="overlay-right">
+          <h1 id="overlay-right-title">Hello, Friend!</h1>
+          <p id="overlay-right-text">Enter your personal details and start journey with us</p>
+          <button class="ghost" id="signUp">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    http_response_code(200);
-    exit(0);
-}
-
-
-// Check request method
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
-    exit();
-}
-
-// Check required fields
-if (empty($_POST['email']) || empty($_POST['password'])) {
-    echo json_encode(["status" => "error", "message" => "Email and password are required"]);
-    exit();
-}
-
-// DB connection
-$mysqli = new mysqli("localhost", "root", "", "usersdb");
-if ($mysqli->connect_error) {
-    echo json_encode(["status" => "error", "message" => "Connection failed: " . $mysqli->connect_error]);
-    exit();
-}
-
-$email = trim($_POST['email']);
-$password = $_POST['password'];
-
-// Prepare and execute query
-$stmt = $mysqli->prepare("SELECT id_user, username, password FROM user WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$stmt->store_result();
-
-if ($stmt->num_rows == 1) {
-    $stmt->bind_result($user_id, $username, $hashed_password);
-    $stmt->fetch();
-
-    if (password_verify($password, $hashed_password)) {
-        // Set session variables
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['username'] = $username;
-        $_SESSION['email'] = $email;
-        $_SESSION['logged_in'] = true;
-
-        echo json_encode([
-            "status" => "success",
-            "username" => $username
-        ]);
-    } else {
-        echo json_encode([
-            "status" => "error",
-            "message" => "Incorrect password."
-        ]);
-    }
-} else {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Email not found."
-    ]);
-}
-
-$stmt->close();
-$mysqli->close();
-?>
+  <script src="regular-auth.js"></script>
+</body>
+</html>

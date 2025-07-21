@@ -1,246 +1,114 @@
-// Regular Authentication Functions
+// regular-auth.js
 
-// Utility functions for better UX
-function showError(message) {
-  // You can customize this to show errors in a nicer way
-  alert(message);
-}
-
-function showSuccess(message) {
-  // You can customize this to show success messages in a nicer way
-  alert(message);
-}
-
-function showLoading(button) {
-  button.disabled = true;
-  button.textContent = 'Loading...';
-}
-
-function hideLoading(button, originalText) {
-  button.disabled = false;
-  button.textContent = originalText;
-}
-
-// Email validation
-function isValidEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-// Password validation
-function isValidPassword(password) {
-  return password.length >= 6; // Minimum 6 characters
-}
-
-// Handle regular signup
-async function handleRegularSignup(name, email, password) {
-  try {
-    const response = await fetch('http://localhost/recipe-ai/public/register.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        name: name,
-        email: email,
-        password: password
-      })
-    });
-
-    const result = await response.text();
-    
-    if (response.ok && result.includes('Registration successful')) {
-      showSuccess('Registration successful! Please sign in.');
-      // Switch to sign-in form
-      const container = document.getElementById('login-container');
-      if (container) {
-        container.classList.remove('right-panel-active');
-      }
-      // Clear the signup form
-      document.getElementById('sign-up-form').reset();
-    } else {
-      showError(result || 'Registration failed. Please try again.');
-    }
-  } catch (error) {
-    console.error('Signup error:', error);
-    showError('Network error. Please try again.');
-  }
-}
-
-async function handleRegularSignin(email, password) {
-  try {
-    const response = await fetch('http://localhost/recipe-ai/public/login.php', {
-      method: 'POST',
-      credentials: 'include',    // << Add this to send cookies/session
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        email: email,
-        password: password
-      })
-    });
-
-    const result = await response.json();  // <-- parse JSON now
-
-    if (result.status === 'success') {
-      // Save the username from response, not email
-      localStorage.setItem('username', result.username);
-
-      // Redirect to home page
-      window.location.href = 'http://localhost:5500/recipe-ai/public/index.html';
-    } else {
-      showError(result.message || 'Login failed. Please check your credentials.');
-    }
-
-  } catch (error) {
-    console.error('Signin error:', error);
-    showError('Network error. Please try again.');
-  }
-}
-
-
-// Handle traditional form submissions
-function setupRegularAuthForms() {
-  const signUpForm = document.getElementById('sign-up-form');
-  const signInForm = document.getElementById('sign-in-form');
-  
-  if (signUpForm) {
-      signUpForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          
-          const submitButton = signUpForm.querySelector('button[type="submit"]');
-          const originalText = submitButton.textContent;
-          
-          const name = document.getElementById('sign-up-name').value.trim();
-          const email = document.getElementById('sign-up-email').value.trim();
-          const password = document.getElementById('sign-up-password').value;
-          
-          // Basic validation
-          if (!name || !email || !password) {
-              showError('Please fill in all fields');
-              return;
-          }
-          
-          if (!isValidEmail(email)) {
-              showError('Please enter a valid email address');
-              return;
-          }
-          
-          if (!isValidPassword(password)) {
-              showError('Password must be at least 6 characters long');
-              return;
-          }
-          
-          showLoading(submitButton);
-          
-          try {
-              await handleRegularSignup(name, email, password);
-          } finally {
-              hideLoading(submitButton, originalText);
-          }
-      });
-  }
-  
-  if (signInForm) {
-      signInForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          
-          const submitButton = signInForm.querySelector('button[type="submit"]');
-          const originalText = submitButton.textContent;
-          
-          const email = document.getElementById('sign-in-email').value.trim();
-          const password = document.getElementById('sign-in-password').value;
-          
-          // Basic validation
-          if (!email || !password) {
-              showError('Please fill in both email and password');
-              return;
-          }
-          
-          if (!isValidEmail(email)) {
-              showError('Please enter a valid email address');
-              return;
-          }
-          
-          showLoading(submitButton);
-          
-          try {
-              await handleRegularSignin(email, password);
-          } finally {
-              hideLoading(submitButton, originalText);
-          }
-      });
-  }
-}
-
-// Form switching logic (keeping it separate in case you want to customize)
+// Handle switching between Sign Up and Sign In panels
 function setupFormSwitching() {
   const container = document.getElementById('login-container');
   const signUpButton = document.getElementById('signUp');
   const signInButton = document.getElementById('signIn');
-  
+
   if (signUpButton && container) {
-      signUpButton.addEventListener('click', () => {
-          container.classList.add('right-panel-active');
-      });
+    signUpButton.addEventListener('click', () => {
+      container.classList.add('right-panel-active');
+    });
   }
-  
+
   if (signInButton && container) {
-      signInButton.addEventListener('click', () => {
-          container.classList.remove('right-panel-active');
-      });
+    signInButton.addEventListener('click', () => {
+      container.classList.remove('right-panel-active');
+    });
   }
 }
 
-// Initialize regular authentication when page loads
+// Handle Sign Up form submission
+async function handleSignUp(event) {
+  event.preventDefault();
+
+  const name = document.getElementById('sign-up-name').value.trim();
+  const email = document.getElementById('sign-up-email').value.trim();
+  const password = document.getElementById('sign-up-password').value;
+
+  if (!name || !email || !password) {
+    alert('Please fill in all sign-up fields.');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:5000/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password }),
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      alert('Failed to register user.');
+      return;
+    }
+
+    const data = await response.json();
+
+    if (data.status === 'success') {
+      alert('Registration successful! Please sign in.');
+      // Switch to sign-in form after successful registration
+      document.getElementById('login-container').classList.remove('right-panel-active');
+      // Optionally reset form
+      event.target.reset();
+    } else {
+      alert('Registration failed: ' + data.message);
+    }
+  } catch (error) {
+    alert('Error registering user.');
+    console.error('Sign-up error:', error);
+  }
+}
+
+// Handle Sign In form submission
+async function handleSignIn(event) {
+  event.preventDefault();
+
+  const email = document.getElementById('sign-in-email').value.trim();
+  const password = document.getElementById('sign-in-password').value;
+
+  if (!email || !password) {
+    alert('Please enter both email and password.');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      alert('Login request failed.');
+      return;
+    }
+
+    const data = await response.json();
+
+    if (data.status === 'success') {
+      alert('Login successful! Redirecting...');
+      // Redirect to main page after successful login
+      window.location.href = 'index.html';
+    } else {
+      alert('Login failed: ' + data.message);
+    }
+  } catch (error) {
+    alert('Error signing in.');
+    console.error('Sign-in error:', error);
+  }
+}
+
+// Initialize event listeners on page load
 window.addEventListener('load', () => {
-  // Set up form switching
   setupFormSwitching();
-  
-  // Set up regular form handling
-  setupRegularAuthForms();
+
+  const signUpForm = document.getElementById('sign-up-form');
+  if (signUpForm) signUpForm.addEventListener('submit', handleSignUp);
+
+  const signInForm = document.getElementById('sign-in-form');
+  if (signInForm) signInForm.addEventListener('submit', handleSignIn);
 });
-
-// Add Enter key support for better UX
-document.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
-      // Check if we're in a form and trigger submission
-      const activeElement = document.activeElement;
-      if (activeElement && activeElement.form) {
-          const submitButton = activeElement.form.querySelector('button[type="submit"], button:not([type])');
-          if (submitButton) {
-              submitButton.click();
-          }
-      }
-  }
-});
-
-// Optional: Add real-time validation feedback
-function setupRealTimeValidation() {
-  const emailInputs = document.querySelectorAll('input[type="email"]');
-  const passwordInputs = document.querySelectorAll('input[type="password"]');
-  
-  emailInputs.forEach(input => {
-    input.addEventListener('blur', () => {
-      if (input.value && !isValidEmail(input.value)) {
-        input.style.borderColor = '#ff4444';
-      } else {
-        input.style.borderColor = '';
-      }
-    });
-  });
-  
-  passwordInputs.forEach(input => {
-    input.addEventListener('blur', () => {
-      if (input.value && !isValidPassword(input.value)) {
-        input.style.borderColor = '#ff4444';
-      } else {
-        input.style.borderColor = '';
-      }
-    });
-  });
-}
-
-// Initialize real-time validation
-window.addEventListener('load', setupRealTimeValidation);
