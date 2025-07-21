@@ -16,9 +16,9 @@
         <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
       </svg>
     </button>
-    <h1 id="welcomeMessage" style="display:none;">Welcome!</h1>
+   
   </header>
-
+ <h1 id="welcomeMessage" style="display:none;">Welcome!</h1>
   <!-- Navigation Tabs -->
   <nav class="nav-tabs">
     <button class="tab" data-tab="grocery">Grocery List</button>
@@ -244,30 +244,60 @@
 
     // Load saved recipes
     async function loadSavedRecipes() {
-      const savedOutput = document.getElementById('savedOutput');
-      if (!currentUser) {
-        savedOutput.innerHTML = '<p>Please sign in to see saved recipes.</p>';
-        return;
-      }
-      try {
-        const response = await fetch(`${API_BASE}/get-saved-recipes`, { credentials: 'include' });
-        const data = await response.json();
-        if (data.status === 'success' && Array.isArray(data.recipes) && data.recipes.length) {
-          savedOutput.innerHTML = '<h1>Saved Recipes</h1>' + data.recipes.map(r => `
-            <div class="saved-recipe">
-              <img src="${r.image_url || r.imageUrl || ''}" alt="Recipe Image" class="recipe-image" />
-              <pre>${r.recipe_text || r.recipe || ''}</pre>
-              <p><strong>Grocery List:</strong> ${r.grocery_list || r.groceryList || 'None'}</p>
-            </div>
-          `).join('');
-        } else {
-          savedOutput.innerHTML = '<p>No saved recipes found.</p>';
-        }
-      } catch (err) {
-        console.error(err);
-        savedOutput.innerHTML = '<p>Error loading saved recipes.</p>';
-      }
+  const savedOutput = document.getElementById('savedOutput');
+  if (!currentUser) {
+    savedOutput.innerHTML = '<h1>Saved Recipes</h1><p>(Please sign in to see saved recipes.)</p>';
+    return;
+  }
+  try {
+    const response = await fetch(`${API_BASE}/get-saved-recipes`, { credentials: 'include' });
+    const data = await response.json();
+    if (data.status === 'success' && Array.isArray(data.recipes) && data.recipes.length) {
+      savedOutput.innerHTML = '<h1>Saved Recipes</h1>' + data.recipes.map(r => `
+        <div class="saved-recipe" style="position: relative; border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+          <img src="${r.image_url || r.imageUrl || ''}" alt="Recipe Image" class="recipe-image" />
+          <pre>${r.recipe_text || r.recipe || ''}</pre>
+          <p><strong>Grocery List:</strong> ${r.grocery_list || r.groceryList || 'None'}</p>
+          <button class="delete-recipe-btn" data-id="${r.id}" style="position: absolute; top: 10px; right: 10px; font-size: 12px; padding: 4px 8px; cursor: pointer;">Delete</button>
+        </div>
+      `).join('');
+      
+      // Add event listeners for delete buttons
+      document.querySelectorAll('.delete-recipe-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const recipeId = e.target.getAttribute('data-id');
+          if (!recipeId) return;
+          if (!confirm('Are you sure you want to delete this recipe?')) return;
+
+          try {
+            const res = await fetch(`${API_BASE}/delete-recipe`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ id: recipeId }),
+            });
+            const result = await res.json();
+            if (result.status === 'success') {
+              alert('Recipe deleted.');
+              loadSavedRecipes(); // reload list after delete
+            } else {
+              alert('Failed to delete recipe: ' + (result.message || 'Unknown error'));
+            }
+          } catch (err) {
+            console.error(err);
+            alert('Error deleting recipe.');
+          }
+        });
+      });
+
+    } else {
+      savedOutput.innerHTML = '<p>No saved recipes found.</p>';
     }
+  } catch (err) {
+    console.error(err);
+    savedOutput.innerHTML = '<p>Error loading saved recipes.</p>';
+  }
+}
 
     // On load
     checkSession();

@@ -230,4 +230,20 @@ app.get("/get-saved-recipes", async (req, res) => {
   res.json({ status: "success", recipes });
 });
 
+// DELETE recipe route (add this in your Express backend file)
+app.post("/delete-recipe", async (req, res) => {
+  if (!req.session.userId) return res.json({ status: "error", message: "Not logged in" });
+
+  const { id } = req.body;
+  if (!id) return res.json({ status: "error", message: "Recipe ID required" });
+
+  try {
+    await db.run("DELETE FROM recipes WHERE id = ? AND user_id = ?", id, req.session.userId);
+    res.json({ status: "success" });
+  } catch (err) {
+    console.error(err);
+    res.json({ status: "error", message: "Failed to delete recipe" });
+  }
+});
+
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
