@@ -258,7 +258,7 @@
           <img src="${r.image_url || r.imageUrl || ''}" alt="Recipe Image" class="recipe-image" />
           <pre>${r.recipe_text || r.recipe || ''}</pre>
           <p><strong>Grocery List:</strong> ${r.grocery_list || r.groceryList || 'None'}</p>
-          <button class="delete-recipe-btn" data-id="${r.id}" style="position: absolute; top: 10px; right: 10px; font-size: 12px; padding: 4px 8px; cursor: pointer;">Delete</button>
+          <button class="delete-recipe-btn" data-id="${r.id}">Delete</button>
         </div>
       `).join('');
       
