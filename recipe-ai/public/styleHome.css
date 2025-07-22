@@ -294,15 +294,19 @@ button:hover {
 }
 
 .delete-recipe-btn {
+  all: unset; /* resets all default button styles */
   background-color: #5e5c5c;
-  border: none;
   color: white;
-  padding: 5px 10px;
-  font-size: 12px;
+  padding: 12px 15px;
+  font-size: 18px;
   border-radius: 4px;
   cursor: pointer;
-  float: right;
-  margin-top: -35px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: fit-content;
+  line-height: 1;
+  text-align: center;
 }
 
 .delete-recipe-btn:hover {
