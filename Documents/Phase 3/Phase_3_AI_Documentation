@@ -1,0 +1,64 @@
+AI Recipe Generator - Project Documentation
+===========================================
+
+Overview:
+---------
+This project was built to explore and implement an AI-powered recipe generator using OpenAI's API. The system takes user-provided ingredients and dietary restrictions as input, then returns dynamically generated recipes through a styled HTML interface. The project combines frontend development (HTML/CSS/JS) with backend logic via Node.js and Express, and leverages OpenAI’s capabilities for natural language recipe creation.
+
+Phase 1: Foundation Setup
+-------------------------
+We initially asked ChatGPT to scaffold a basic HTML layout containing:
+- Ingredient input field
+- Dietary restriction input field
+- A functional backend server connected to the OpenAI API
+
+Purpose:
+- Learn the interaction between frontend HTML and backend JavaScript
+- Use a working template as a foundation for deeper customization
+
+Issue Encountered:
+- The initial AI-generated output container did not visually align with the input fields (border mismatch). This was resolved with minor HTML/CSS adjustments.
+
+Takeaway:
+- Gained a better understanding of how frontend elements communicate with backend endpoints
+- Learned how to troubleshoot frontend display bugs caused by style inconsistencies
+
+Phase 2: Tabbed Navigation
+--------------------------
+To improve usability, we added multiple navigation tabs across the interface (e.g., Recipe Generator, Grocery List, Saved Recipes).
+
+Approach:
+- Asked ChatGPT to demonstrate basic HTML tab creation
+- Manually expanded additional tab content across separate HTML files
+- Minimal rework was required due to the clarity of the original implementation
+
+Benefit:
+- Streamlined navigation between features without relying on external documentation sources like Stack Overflow
+
+Phase 3: Styling and Aesthetic Polish
+-------------------------------------
+After layout and functionality were established, we requested ChatGPT to apply modern UI/UX styling to the app.
+
+Tools:
+- CSS optimizations applied to buttons, containers, fonts, and page layout
+- Responsive adjustments were made to improve readability and design consistency
+
+Manual Adjustments:
+- Image and logo positioning (e.g., login image placement)
+- Color consistency
+- Header/footer alignment
+
+Logo Generation:
+----------------
+The site’s logo was also created using ChatGPT's image generation capability, customized to fit the branding needs of the application.
+
+Additional Highlights:
+----------------------
+- Saved Recipes page was styled to mirror the live recipe output container
+- Each saved recipe includes a delete button for database management
+- Header consistency was maintained across all pages
+
+Conclusion:
+-----------
+This project served as both a learning platform and a working prototype. Through iterative use of ChatGPT, we accelerated both the design and backend integration processes without relying heavily on traditional web forums. The project now serves as a solid base for future features like user accounts, improved recipe ranking, and mobile responsiveness.
+
