@@ -174,16 +174,116 @@
       }
     });
 
-    function displayRecipe(data) {
-      const safeImg = data.imageUrl ? `<img src="${data.imageUrl}" alt="Recipe Image" class="recipe-image" />` : '';
-      output.innerHTML = `
-        ${safeImg}
-        <pre class="recipe-text">${data.recipe || 'No recipe text returned.'}</pre>
-        <button id="saveRecipeBtn">Save Recipe</button>
-      `;
-      document.getElementById('saveRecipeBtn').addEventListener('click', () => saveRecipe(data));
-    }
+    // Replace your existing displayRecipe function with this enhanced version
+function displayRecipe(data) {
+  const safeImg = data.imageUrl ? `<img src="${data.imageUrl}" alt="Recipe Image" class="recipe-image" />` : '';
+  
+  // Parse the recipe text into sections
+  const parsedRecipe = parseRecipeText(data.recipe || '');
+  
+  output.innerHTML = `
+    ${safeImg}
+    <div class="recipe-container">
+      <h2 class="recipe-title">${parsedRecipe.title}</h2>
+      
+      <div class="ingredients-section">
+        <h3>Ingredients:</h3>
+        <ul class="ingredients-list">
+          ${parsedRecipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+        </ul>
+      </div>
+      
+      <div class="steps-section">
+        <h3>Instructions:</h3>
+        <ol class="steps-list">
+          ${parsedRecipe.steps.map(step => `<li>${step}</li>`).join('')}
+        </ol>
+      </div>
+    </div>
+    <button id="saveRecipeBtn">Save Recipe</button>
+  `;
+  
+  document.getElementById('saveRecipeBtn').addEventListener('click', () => saveRecipe(data));
+}
 
+// Function to parse recipe text into title, ingredients, and steps
+function parseRecipeText(recipeText) {
+  if (!recipeText) {
+    return {
+      title: 'Recipe',
+      ingredients: ['No ingredients found'],
+      steps: ['No steps found']
+    };
+  }
+  
+  // Initialize default values
+  let title = 'Recipe';
+  let ingredients = [];
+  let steps = [];
+  
+  // Split the text into lines for easier parsing
+  const lines = recipeText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+  
+  let currentSection = '';
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const lowerLine = line.toLowerCase();
+    
+    // Check if this line is a section header
+    if (lowerLine.includes('title') || (i === 0 && !lowerLine.includes('ingredient') && !lowerLine.includes('step'))) {
+      // This is likely the title
+      if (lowerLine.includes('title:')) {
+        title = line.replace(/title:\s*/i, '').trim();
+      } else if (i === 0) {
+        title = line;
+      }
+      currentSection = 'title';
+    }
+    else if (lowerLine.includes('ingredient')) {
+      currentSection = 'ingredients';
+      // Skip the header line unless it contains actual ingredient info
+      if (lowerLine === 'ingredients:' || lowerLine === 'ingredients') {
+        continue;
+      }
+    }
+    else if (lowerLine.includes('step') || lowerLine.includes('instruction') || lowerLine.includes('direction')) {
+      currentSection = 'steps';
+      // Skip the header line
+      if (lowerLine === 'steps:' || lowerLine === 'instructions:' || lowerLine === 'directions:') {
+        continue;
+      }
+    }
+    else {
+      // This is content for the current section
+      if (currentSection === 'ingredients') {
+        // Clean up ingredient lines (remove bullets, numbers, etc.)
+        let cleanIngredient = line.replace(/^[-•*]\s*/, '').replace(/^\d+\.\s*/, '').trim();
+        if (cleanIngredient) {
+          ingredients.push(cleanIngredient);
+        }
+      }
+      else if (currentSection === 'steps') {
+        // Clean up step lines (remove numbers, etc.)
+        let cleanStep = line.replace(/^\d+\.\s*/, '').replace(/^step\s*\d+:?\s*/i, '').trim();
+        if (cleanStep) {
+          steps.push(cleanStep);
+        }
+      }
+    }
+  }
+  
+  // Fallback: if we couldn't parse properly, treat entire text as steps
+  if (ingredients.length === 0 && steps.length === 0) {
+    steps = [recipeText];
+  }
+  
+  return {
+    title: title || 'Recipe',
+    ingredients: ingredients.length > 0 ? ingredients : ['No ingredients specified'],
+    steps: steps.length > 0 ? steps : ['No steps specified']
+  };
+}
     function displayGroceryList(groceryText) {
       const groceryBox = document.getElementById('groceryOutput');
       if (!groceryText) {
@@ -201,49 +301,212 @@
       `;
     }
 
-    // Tab switching
-    document.querySelectorAll('.nav-tabs .tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.nav-tabs .tab').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const tabId = btn.getAttribute('data-tab');
-        document.querySelectorAll('.tab-section').forEach(section => section.classList.remove('active'));
-        document.getElementById('tab-' + tabId).classList.add('active');
-        if (tabId === 'saved') loadSavedRecipes();
-      });
-    });
+    // Replace your existing tab switching code with this updated version
+  document.querySelectorAll('.nav-tabs .tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tabs .tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const tabId = btn.getAttribute('data-tab');
+    document.querySelectorAll('.tab-section').forEach(section => section.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    
+    // Load content based on which tab is selected
+    if (tabId === 'saved') {
+      loadSavedRecipes();
+    } else if (tabId === 'grocery') {
+      updateAccumulatedGroceryList();
+    }
+  });
+});
 
     // Save recipe to backend
-    async function saveRecipe(data) {
-      if (!currentUser) {
-        alert('Please sign in to save recipes.');
-        return;
-      }
-      try {
-        const response = await fetch(`${API_BASE}/save-recipe`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            recipe: data.recipe,
-            imageUrl: data.imageUrl,
-            groceryList: data.groceryList || ''
-          }),
-        });
-        const result = await response.json();
-        if (result.status === 'success') {
-          alert('Recipe saved!');
-        } else {
-          alert('Failed to save recipe: ' + (result.message || 'Unknown error'));
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Error saving recipe');
-      }
+    // Replace your existing saveRecipe function with this updated version
+async function saveRecipe(data) {
+  if (!currentUser) {
+    alert('Please sign in to save recipes.');
+    return;
+  }
+  try {
+    const response = await fetch(`${API_BASE}/save-recipe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        recipe: data.recipe,
+        imageUrl: data.imageUrl,
+        groceryList: data.groceryList || ''
+      }),
+    });
+    const result = await response.json();
+    if (result.status === 'success') {
+      alert('Recipe saved!');
+      
+      // Update the accumulated grocery list in the grocery tab
+      updateAccumulatedGroceryList();
+      
+    } else {
+      alert('Failed to save recipe: ' + (result.message || 'Unknown error'));
     }
+  } catch (err) {
+    console.error(err);
+    alert('Error saving recipe');
+  }
+}
+
+// Function to update the accumulated grocery list from all saved recipes
+async function updateAccumulatedGroceryList() {
+  if (!currentUser) {
+    const groceryBox = document.getElementById('groceryOutput');
+    groceryBox.innerHTML = `
+      <div class="grocery-container">
+        <h1>🛒 Your Grocery List</h1>
+        <p>(Please sign in to see your accumulated grocery list.)</p>
+      </div>
+    `;
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/get-saved-recipes`, { credentials: 'include' });
+    const data = await response.json();
+    
+    if (data.status === 'success' && Array.isArray(data.recipes) && data.recipes.length) {
+      // Collect all grocery list items from all saved recipes
+      const allGroceryItems = [];
+      
+      data.recipes.forEach((recipe, index) => {
+        const groceryList = recipe.grocery_list || recipe.groceryList || '';
+        if (groceryList && groceryList !== 'None' && groceryList.trim()) {
+          const items = groceryList.split(',').map(item => item.trim()).filter(item => item);
+          items.forEach(item => {
+            // Parse the recipe to get its title
+            const parsedRecipe = parseRecipeText(recipe.recipe_text || recipe.recipe || '');
+            const recipeTitle = parsedRecipe.title || `Recipe ${index + 1}`;
+            
+            allGroceryItems.push({
+              item: item,
+              source: recipeTitle
+            });
+          });
+        }
+      });
+      
+      displayAccumulatedGroceryList(allGroceryItems);
+      
+    } else {
+      const groceryBox = document.getElementById('groceryOutput');
+      groceryBox.innerHTML = `
+        <div class="grocery-container">
+          <h1>🛒 Your Grocery List</h1>
+          <p>No saved recipes with grocery items found.</p>
+          <p class="empty-note">Save some recipes to build your grocery list!</p>
+        </div>
+      `;
+    }
+    
+  } catch (err) {
+    console.error(err);
+    const groceryBox = document.getElementById('groceryOutput');
+    groceryBox.innerHTML = `
+      <div class="grocery-container">
+        <h1>🛒 Your Grocery List</h1>
+        <p style="color: red;">Error loading grocery list.</p>
+      </div>
+    `;
+  }
+}
+
+// Function to display the accumulated grocery list with beautiful styling
+function displayAccumulatedGroceryList(groceryItems) {
+  const groceryBox = document.getElementById('groceryOutput');
+  
+  if (!groceryItems || groceryItems.length === 0) {
+    groceryBox.innerHTML = `
+      <div class="grocery-container">
+        <h1>🛒 Your Grocery List</h1>
+        <div class="empty-grocery">
+          <p>No grocery items from your saved recipes!</p>
+          <p class="empty-note">Save recipes with grocery lists to build your shopping list.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  
+  groceryBox.innerHTML = `
+    <div class="grocery-container">
+      <h1>🛒 Your Grocery List</h1>
+      <p class="grocery-summary">Combined grocery items from all your saved recipes</p>
+      
+      <div class="grocery-actions">
+        <button id="clearAccumulatedBtn" class="action-btn clear-btn">Clear All</button>
+        <button id="printAccumulatedBtn" class="action-btn print-btn">Print List</button>
+      </div>
+      
+      <div class="grocery-category">
+        <h3 class="category-title">Shopping Items</h3>
+        <ul class="grocery-items">
+          ${groceryItems.map((item, idx) => `
+            <li class="grocery-item" data-index="${idx}">
+              <input type="checkbox" id="accumulated-item-${idx}" class="grocery-checkbox">
+              <label for="accumulated-item-${idx}" class="grocery-label">
+                <span class="item-text">${item.item}</span>
+                <span class="item-source">(from: ${item.source})</span>
+              </label>
+            </li>
+          `).join('')}
+        </ul>
+      </div>
+      
+      <div class="grocery-footer">
+        <p class="total-items">Total items: ${groceryItems.length}</p>
+      </div>
+    </div>
+  `;
+  
+  // Add event listeners for the accumulated grocery list
+  addAccumulatedGroceryEventListeners();
+}
+
+// Event listeners for accumulated grocery list
+function addAccumulatedGroceryEventListeners() {
+  // Checkbox interactions
+  document.querySelectorAll('.grocery-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      const label = this.nextElementSibling;
+      if (this.checked) {
+        label.classList.add('completed');
+      } else {
+        label.classList.remove('completed');
+      }
+    });
+  });
+  
+  // Clear all button
+  const clearBtn = document.getElementById('clearAccumulatedBtn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to clear all checked items?')) {
+        document.querySelectorAll('.grocery-checkbox:checked').forEach(checkbox => {
+          checkbox.checked = false;
+          checkbox.nextElementSibling.classList.remove('completed');
+        });
+      }
+    });
+  }
+  
+  // Print list button
+  const printBtn = document.getElementById('printAccumulatedBtn');
+  if (printBtn) {
+    printBtn.addEventListener('click', () => {
+      window.print();
+    });
+  }
+}
 
     // Load saved recipes
-    async function loadSavedRecipes() {
+// Replace your existing loadSavedRecipes function with this updated version
+async function loadSavedRecipes() {
   const savedOutput = document.getElementById('savedOutput');
   if (!currentUser) {
     savedOutput.innerHTML = '<h1>Saved Recipes</h1><p>(Please sign in to see saved recipes.)</p>';
@@ -253,14 +516,41 @@
     const response = await fetch(`${API_BASE}/get-saved-recipes`, { credentials: 'include' });
     const data = await response.json();
     if (data.status === 'success' && Array.isArray(data.recipes) && data.recipes.length) {
-      savedOutput.innerHTML = '<h1>Saved Recipes</h1>' + data.recipes.map(r => `
-        <div class="saved-recipe" style="position: relative; border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
-          <img src="${r.image_url || r.imageUrl || ''}" alt="Recipe Image" class="recipe-image" />
-          <pre>${r.recipe_text || r.recipe || ''}</pre>
-          <p><strong>Grocery List:</strong> ${r.grocery_list || r.groceryList || 'None'}</p>
-          <button class="delete-recipe-btn" data-id="${r.id}">Delete</button>
-        </div>
-      `).join('');
+      savedOutput.innerHTML = '<h1>Saved Recipes</h1>' + data.recipes.map(r => {
+        // Parse each saved recipe using the same parser function
+        const parsedRecipe = parseRecipeText(r.recipe_text || r.recipe || '');
+        
+        return `
+          <div class="saved-recipe">
+            <img src="${r.image_url || r.imageUrl || ''}" alt="Recipe Image" class="recipe-image" />
+            
+            <div class="recipe-container">
+              <h2 class="recipe-title">${parsedRecipe.title}</h2>
+              
+              <div class="ingredients-section">
+                <h3>Ingredients:</h3>
+                <ul class="ingredients-list">
+                  ${parsedRecipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+                </ul>
+              </div>
+              
+              <div class="steps-section">
+                <h3>Instructions:</h3>
+                <ol class="steps-list">
+                  ${parsedRecipe.steps.map(step => `<li>${step}</li>`).join('')}
+                </ol>
+              </div>
+              
+              <div class="grocery-section">
+                <h3>Grocery List:</h3>
+                <p class="grocery-list">${r.grocery_list || r.groceryList || 'None'}</p>
+              </div>
+            </div>
+            
+            <button class="delete-recipe-btn" data-id="${r.id}">Delete</button>
+          </div>
+        `;
+      }).join('');
       
       // Add event listeners for delete buttons
       document.querySelectorAll('.delete-recipe-btn').forEach(button => {
